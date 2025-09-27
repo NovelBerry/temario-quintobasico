@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Pruebas 5° Básico - Chile</title>
+    <title>Simulador de Pruebas de Validación 5° Básico (Chile)</title>
     <style>
         /* Estilos CSS */
         body {
@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             background: #fff;
             padding: 30px;
@@ -75,8 +75,9 @@
 
         .pregunta {
             margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #eee;
+            padding: 15px;
+            border: 1px solid #f0f0f0;
+            border-radius: 5px;
         }
 
         .pregunta p {
@@ -89,10 +90,6 @@
             margin-left: 20px;
             margin-bottom: 5px;
             cursor: pointer;
-        }
-
-        .opcion-respuesta input[type="radio"] {
-            margin-right: 8px;
         }
         
         /* Estilos para mostrar las respuestas */
@@ -123,21 +120,21 @@
 <body>
 
 <div class="container">
-    <h1 id="titulo-principal">Simulador de Pruebas de Validación 5° Básico (Chile)</h1>
-    <p>Selecciona una opción para comenzar. Recuerda que cada prueba tiene una duración máxima de 90 minutos.</p>
+    <h1 id="titulo-principal">Simulador de Pruebas de Validación 5° Básico (25 Preguntas por Examen)</h1>
+    <p>Selecciona una opción para comenzar. Cada prueba consta de **25 preguntas** y tiene una duración máxima de **90 minutos**.</p>
 
     <div id="menu-principal" class="menu-grid">
-        <button class="menu-button materia-btn" onclick="iniciarPrueba('matematicas')">Matemáticas 🔢</button>
-        <button class="menu-button materia-btn" onclick="iniciarPrueba('lenguaje')">Lenguaje y Comunicación 📖</button>
-        <button class="menu-button materia-btn" onclick="iniciarPrueba('ciencias')">Ciencias Naturales 🔬</button>
-        <button class="menu-button materia-btn" onclick="iniciarPrueba('historia')">Historia, Geografía y C. Sociales 🌎</button>
-        <button class="menu-button materia-btn" onclick="iniciarPrueba('ingles')">Inglés 🇬🇧</button>
+        <button class="menu-button materia-btn" onclick="iniciarPrueba('matematicas')">Matemáticas 🔢 (25 Preguntas)</button>
+        <button class="menu-button materia-btn" onclick="iniciarPrueba('lenguaje')">Lenguaje y Comunicación 📖 (25 Preguntas)</button>
+        <button class="menu-button materia-btn" onclick="iniciarPrueba('ciencias')">Ciencias Naturales 🔬 (25 Preguntas)</button>
+        <button class="menu-button materia-btn" onclick="iniciarPrueba('historia')">Historia, Geografía y C. Sociales 🌎 (25 Preguntas)</button>
+        <button class="menu-button materia-btn" onclick="iniciarPrueba('ingles')">Inglés 🇬🇧 (25 Preguntas)</button>
         
         <button class="menu-button opcion-btn" onclick="mostrarRespuestasGeneral()">Ver Respuestas (Todas) ✔️</button>
         <button id="timer-toggle-btn" class="menu-button opcion-btn" onclick="toggleTimer()">Activar/Desactivar Temporizador ⏱️</button>
     </div>
 
-    <div id="timer-display" class="timer-info" style="display: none;">Temporizador: **90:00**</div>
+    <div id="timer-display" class="timer-info" style="display: none;"></div>
 
     <div id="prueba-area" class="prueba-container" style="display: none;">
         <h2 id="nombre-asignatura"></h2>
@@ -155,124 +152,282 @@
     const DURACION_MAXIMA = 90 * 60; // 90 minutos en segundos
     let timeLeft = DURACION_MAXIMA;
     let currentAsignatura = '';
-    const MAX_PREGUNTAS_SIMULACION = 3; // Límite para esta simulación. El temario real indica 25.
+    const TOTAL_PREGUNTAS = 25;
 
-    // Estructura de las Preguntas (Basadas en los OA del temario)
+    // --- BANCO COMPLETO DE 125 PREGUNTAS Y RESPUESTAS ---
     const bancoDePreguntas = {
         'matematicas': [
             // OA 1: Valor Posicional
-            {
-                pregunta: `(OA 1) ¿Cuál es el valor posicional del dígito **7** en el número 874.215.000?`,
-                opciones: ['7 millones', '70 millones', '700 millones', '7 mil'],
-                respuestaCorrecta: '70 millones'
-            },
-            // OA 3 y 4: Multiplicación y División en Problemas
-            {
-                pregunta: `(OA 3) Una caja contiene 45 lápices de colores. Si una escuela compró 12 cajas, ¿cuántos lápices compró en total?`,
-                opciones: ['57', '450', '540', '570'],
-                respuestaCorrecta: '540'
-            },
-            // OA 10: Fracción a Decimal
-            {
-                pregunta: `(OA 10) ¿Qué número decimal corresponde a la fracción propia $\\frac{3}{5}$?`,
-                opciones: ['0,3', '0,5', '0,6', '0,8'],
-                respuestaCorrecta: '0,6'
-            }
+            { pregunta: `(OA 1) ¿Cuál es el valor posicional del dígito **4** en el número 542.871.000?`, opciones: ['40 millones', '4 millones', '400 mil', '400 millones'], respuestaCorrecta: '40 millones' },
+            // OA 2: Comparación de números
+            { pregunta: `(OA 2) ¿Cuál de las siguientes afirmaciones es **correcta**?`, opciones: ['56.780 > 56.870', '100.999 < 100.990', '430.500 < 430.050', '25.001 > 25.000'], respuestaCorrecta: '25.001 > 25.000' },
+            // OA 3: Multiplicación
+            { pregunta: `(OA 3) ¿Cuál es el resultado de la multiplicación 480 $\\times$ 35?`, opciones: ['16.800', '15.400', '14.800', '16.900'], respuestaCorrecta: '16.800' },
+            // OA 4: División
+            { pregunta: `(OA 4) Si 625 dulces se reparten en bolsas de 25, ¿cuántas bolsas se necesitan?`, opciones: ['15', '20', '25', '30'], respuestaCorrecta: '25' },
+            // OA 5: Operaciones con decimales
+            { pregunta: `(OA 5) Si sumas 15,7 y 8,4, ¿cuál es el resultado?`, opciones: ['23,1', '24,1', '23,4', '24,7'], respuestaCorrecta: '24,1' },
+            // OA 6: Fracciones propias
+            { pregunta: `(OA 6) ¿Cuál de las siguientes fracciones es **propia**?`, opciones: ['$\frac{5}{3}$', '$\frac{7}{7}$', '$\frac{2}{9}$', '$\frac{10}{6}$'], respuestaCorrecta: '$\frac{2}{9}$' },
+            // OA 7: Suma y resta de fracciones
+            { pregunta: `(OA 7) ¿Cuál es el resultado de $\frac{1}{4} + \frac{1}{2}$?`, opciones: ['$\frac{2}{6}$', '$\frac{2}{4}$', '$\frac{3}{4}$', '$\frac{1}{8}$'], respuestaCorrecta: '$\frac{3}{4}$' },
+            // OA 10: Fracción a decimal
+            { pregunta: `(OA 10) ¿A qué número decimal corresponde la fracción $\frac{1}{5}$?`, opciones: ['0,1', '0,2', '0,5', '0,25'], respuestaCorrecta: '0,2' },
+            // OA 11: Múltiplos
+            { pregunta: `(OA 11) ¿Cuál de los siguientes números es un **múltiplo** de 6?`, opciones: ['14', '20', '32', '42'], respuestaCorrecta: '42' },
+            // OA 11: Factores
+            { pregunta: `(OA 11) ¿Qué número es un **factor** de 30?`, opciones: ['7', '9', '6', '4'], respuestaCorrecta: '6' },
+            // OA 12: Ángulos
+            { pregunta: `(OA 12) ¿Cómo se llama un ángulo que mide exactamente 90 grados?`, opciones: ['Ángulo agudo', 'Ángulo obtuso', 'Ángulo recto', 'Ángulo extendido'], respuestaCorrecta: 'Ángulo recto' },
+            // OA 13: Figuras 2D
+            { pregunta: `(OA 13) Una figura plana con cinco lados y cinco vértices se llama:`, opciones: ['Cuadrilátero', 'Hexágono', 'Pentágono', 'Trapecio'], respuestaCorrecta: 'Pentágono' },
+            // OA 14: Simetría
+            { pregunta: `(OA 14) ¿Cuál de las siguientes letras tiene un eje de simetría horizontal?`, opciones: ['L', 'Z', 'C', 'P'], respuestaCorrecta: 'C' },
+            // OA 8: Área
+            { pregunta: `(OA 8) El área de un cuadrado de lado 7 cm es:`, opciones: ['14 cm²', '28 cm', '49 cm²', '49 cm'], respuestaCorrecta: '49 cm²' },
+            // OA 9: Perímetro
+            { pregunta: `(OA 9) El perímetro de un triángulo con lados de 5 cm, 7 cm y 10 cm es:`, opciones: ['12 cm', '17 cm', '22 cm', '35 cm'], respuestaCorrecta: '22 cm' },
+            // OA 15: Gráficos de barras
+            { pregunta: `(OA 15) Un gráfico que utiliza rectángulos para mostrar la frecuencia de datos se llama:`, opciones: ['Gráfico de puntos', 'Gráfico circular', 'Gráfico de barras', 'Pictograma'], respuestaCorrecta: 'Gráfico de barras' },
+            // OA 16: Probabilidad
+            { pregunta: `(OA 16) En una bolsa hay 3 bolas rojas y 7 azules. ¿Qué tan probable es sacar una bola verde?`, opciones: ['Seguro', 'Muy probable', 'Imposible', 'Poco probable'], respuestaCorrecta: 'Imposible' },
+            // OA 18: Patrones (Regla)
+            { pregunta: `(OA 18) Si el patrón es 3, 6, 9, 12, la regla es:`, opciones: ['Sumar 2', 'Multiplicar por 2', 'Sumar 3', 'Restar 3'], respuestaCorrecta: 'Sumar 3' },
+            // OA 1: Lectura de números grandes
+            { pregunta: `(OA 1) ¿Cómo se lee el número 1.000.000.000?`, opciones: ['Mil millones', 'Cien millones', 'Un millón', 'Diez mil millones'], respuestaCorrecta: 'Mil millones' },
+            // OA 4: Resto de división
+            { pregunta: `(OA 4) Al dividir 50 entre 6, ¿cuál es el resto?`, opciones: ['1', '2', '3', '4'], respuestaCorrecta: '2' },
+            // OA 8: Volumen
+            { pregunta: `(OA 8) La medida del espacio que ocupa un cuerpo se denomina:`, opciones: ['Área', 'Perímetro', 'Volumen', 'Capacidad'], respuestaCorrecta: 'Volumen' },
+            // OA 10: Suma de decimales
+            { pregunta: `(OA 10) ¿Cuál es el resultado de 0,5 + 0,25?`, opciones: ['0,30', '0,75', '0,55', '1,0'], respuestaCorrecta: '0,75' },
+            // OA 14: Traslación
+            { pregunta: `(OA 14) Un movimiento que desplaza una figura sin rotarla ni reflejarla es una:`, opciones: ['Rotación', 'Reflexión', 'Traslación', 'Simetría'], respuestaCorrecta: 'Traslación' },
+            // OA 16: Evento seguro
+            { pregunta: `(OA 16) ¿Qué evento tiene una probabilidad de 1?`, opciones: ['Sacar cara en una moneda', 'Que salga el sol mañana', 'Lanzar un dado y que salga un 7', 'Que llueva'], respuestaCorrecta: 'Que salga el sol mañana' },
+            // OA 3: Problemas de dos pasos
+            { pregunta: `(OA 3) Si compré 5 lápices a $150 c/u y pagué con $1.000, ¿cuánto me dieron de vuelto?`, opciones: ['$250', '$350', '$750', '$450'], respuestaCorrecta: '$250' }
         ],
         'lenguaje': [
-            // OA 4: Lectura y comprensión de narraciones (Lenguaje figurado)
-            {
-                pregunta: `(OA 4) En la frase: "La luna era una moneda de plata en el cielo", ¿qué recurso literario se está utilizando?`,
-                opciones: ['Personificación', 'Comparación', 'Rima', 'Hipérbole'],
-                respuestaCorrecta: 'Comparación'
-            },
-            // OA 5: Poesía (Elementos formales)
-            {
-                pregunta: `(OA 5) ¿Cómo se llama a un conjunto de versos dentro de un poema?`,
-                opciones: ['Rima', 'Estrofa', 'Narración', 'Metáfora'],
-                respuestaCorrecta: 'Estrofa'
-            },
-            // OA 14: Escritura creativa (Conectores)
-            {
-                pregunta: `(OA 14) ¿Qué conector es el más adecuado para indicar una **consecuencia** en una narración?`,
-                opciones: ['Además', 'Sin embargo', 'Por lo tanto', 'Aunque'],
-                respuestaCorrecta: 'Por lo tanto'
-            }
+            // OA 4: Figuras literarias
+            { pregunta: `(OA 4) ¿Qué figura literaria utiliza la frase: "La lluvia llora sin parar en el tejado"?`, opciones: ['Metáfora', 'Comparación', 'Personificación', 'Hipérbole'], respuestaCorrecta: 'Personificación' },
+            // OA 5: Elementos de la poesía
+            { pregunta: `(OA 5) ¿Cómo se llama al conjunto de versos que forma una unidad en un poema?`, opciones: ['Rima', 'Estrofa', 'Ritmo', 'Métrica'], respuestaCorrecta: 'Estrofa' },
+            // OA 12: Sustantivos
+            { pregunta: `(OA 12) ¿Cuál de las siguientes palabras es un **sustantivo propio**?`, opciones: ['Perro', 'Ciudad', 'Andrés', 'Montaña'], respuestaCorrecta: 'Andrés' },
+            // OA 12: Adjetivos
+            { pregunta: `(OA 12) En la frase "La casa es grande y azul", ¿cuáles son los adjetivos?`, opciones: ['La, casa', 'es, azul', 'grande, azul', 'casa, grande'], respuestaCorrecta: 'grande, azul' },
+            // OA 13: Verbos
+            { pregunta: `(OA 13) ¿Cuál es la forma no personal del verbo en la frase "El niño está **jugando**"?`, opciones: ['Jugaba', 'Jugará', 'Jugando', 'Jugó'], respuestaCorrecta: 'Jugando' },
+            // OA 16: Conectores (Causa)
+            { pregunta: `(OA 16) ¿Qué conector es más adecuado para expresar una **causa**?`, opciones: ['Aunque', 'Por lo tanto', 'También', 'Ya que'], respuestaCorrecta: 'Ya que' },
+            // OA 17: Puntuación (Coma en enumeración)
+            { pregunta: `(OA 17) ¿Cuál es la opción con el uso correcto de la coma en una enumeración?`, opciones: ['Compró lápices cuadernos y gomas.', 'Compró lápices, cuadernos, y gomas.', 'Compró lápices, cuadernos, gomas.', 'Compró lápices cuadernos, gomas.'], respuestaCorrecta: 'Compró lápices, cuadernos, gomas.' },
+            // OA 19: Tipos de textos (Informativo)
+            { pregunta: `(OA 19) Un texto que busca exponer información objetiva sobre un tema se llama:`, opciones: ['Narrativo', 'Lírico', 'Dramático', 'Informativo'], respuestaCorrecta: 'Informativo' },
+            // OA 4: Idea principal
+            { pregunta: `(OA 4) ¿Qué es la **idea principal** de un texto?`, opciones: ['Un detalle sin importancia', 'El tema secundario', 'El mensaje o tema central', 'La opinión del autor'], respuestaCorrecta: 'El mensaje o tema central' },
+            // OA 14: Uso de mayúsculas
+            { pregunta: `(OA 14) ¿En qué caso se debe usar mayúscula?`, opciones: ['Al final de una oración.', 'En nombres comunes.', 'En nombres de países y personas.', 'En adjetivos.'], respuestaCorrecta: 'En nombres de países y personas.' },
+            // OA 5: Poesía (Hablante lírico)
+            { pregunta: `(OA 5) La voz ficticia que expresa sentimientos en un poema se llama:`, opciones: ['Narrador', 'Poeta', 'Hablante lírico', 'Personaje'], respuestaCorrecta: 'Hablante lírico' },
+            // OA 12: Artículo definido
+            { pregunta: `(OA 12) ¿Cuál es el artículo definido para la palabra "árbol"?`, opciones: ['Una', 'Unos', 'El', 'Las'], respuestaCorrecta: 'El' },
+            // OA 13: Tiempos verbales
+            { pregunta: `(OA 13) El verbo "comieron" se encuentra en tiempo:`, opciones: ['Presente', 'Futuro', 'Pasado (Pretérito)', 'Condicional'], respuestaCorrecta: 'Pasado (Pretérito)' },
+            // OA 16: Conectores (Oposición)
+            { pregunta: `(OA 16) ¿Qué conector indica una **oposición** o contraste?`, opciones: ['Por lo tanto', 'Además', 'Sin embargo', 'Es decir'], respuestaCorrecta: 'Sin embargo' },
+            // OA 22: Elementos de la comunicación oral
+            { pregunta: `(OA 22) ¿Cómo se llama al que recibe el mensaje en una comunicación?`, opciones: ['Emisor', 'Receptor', 'Canal', 'Código'], respuestaCorrecta: 'Receptor' },
+            // OA 23: Argumentación
+            { pregunta: `(OA 23) ¿Cuál es el propósito de un texto argumentativo?`, opciones: ['Informar un hecho', 'Contar una historia', 'Convencer o persuadir', 'Describir un objeto'], respuestaCorrecta: 'Convencer o persuadir' },
+            // OA 17: Uso de dos puntos
+            { pregunta: `(OA 17) Los dos puntos (:) se usan antes de:`, opciones: ['Una pregunta', 'Una exclamación', 'Una enumeración anunciada', 'Un punto final'], respuestaCorrecta: 'Una enumeración anunciada' },
+            // OA 14: Palabras con "H"
+            { pregunta: `(OA 14) ¿Cuál de estas palabras se escribe con "H" inicial?`, opciones: ['Eco', 'Onda', 'Oja', 'Hueso'], respuestaCorrecta: 'Hueso' },
+            // OA 19: Cuento
+            { pregunta: `(OA 19) El texto narrativo breve, con pocos personajes y un solo conflicto es el:`, opciones: ['Novela', 'Ensayo', 'Cuento', 'Fábula'], respuestaCorrecta: 'Cuento' },
+            // OA 12: Género y número
+            { pregunta: `(OA 12) El sustantivo "las mesas" está en:`, opciones: ['Singular femenino', 'Plural masculino', 'Singular masculino', 'Plural femenino'], respuestaCorrecta: 'Plural femenino' },
+            // OA 4: Secuencia de hechos
+            { pregunta: `(OA 4) ¿Qué parte de un texto narrativo presenta la solución al conflicto?`, opciones: ['Inicio', 'Desarrollo', 'Desenlace', 'Clímax'], respuestaCorrecta: 'Desenlace' },
+            // OA 13: Adverbios
+            { pregunta: `(OA 13) La palabra "rápidamente" es un adverbio de:`, opciones: ['Tiempo', 'Lugar', 'Modo', 'Cantidad'], respuestaCorrecta: 'Modo' },
+            // OA 16: Conectores (Adición)
+            { pregunta: `(OA 16) ¿Cuál conector sirve para añadir información?`, opciones: ['Porque', 'Además', 'Pero', 'Entonces'], respuestaCorrecta: 'Además' },
+            // OA 19: Mito y leyenda
+            { pregunta: `(OA 19) Relato tradicional que busca explicar el origen del mundo o fenómenos naturales:`, opciones: ['Leyenda', 'Fábula', 'Mito', 'Novela'], respuestaCorrecta: 'Mito' },
+            // OA 17: Punto aparte
+            { pregunta: `(OA 17) ¿Qué signo de puntuación se usa para separar dos párrafos distintos?`, opciones: ['Punto seguido', 'Punto final', 'Coma', 'Punto aparte'], respuestaCorrecta: 'Punto aparte' }
         ],
         'ciencias': [
-            // OA 1: Célula, Tejidos, Órganos y Sistemas
-            {
-                pregunta: `(OA 1) ¿Cuál es la unidad estructural y funcional básica de todos los seres vivos, tanto plantas como animales?`,
-                opciones: ['Tejido', 'Órgano', 'Sistema', 'Célula'],
-                respuestaCorrecta: 'Célula'
-            },
-            // OA 5: Nutrición y Alimentos
-            {
-                pregunta: `(OA 5) ¿Qué grupo de alimentos es fundamental para la **reparación y el crecimiento** del cuerpo, como la carne y las legumbres?`,
-                opciones: ['Vitaminas y minerales', 'Lípidos', 'Carbohidratos', 'Proteínas'],
-                respuestaCorrecta: 'Proteínas'
-            },
-            // OA 10: Conductores y Aisladores de Electricidad
-            {
-                pregunta: `(OA 10) ¿Cuál de los siguientes materiales se clasifica como un **aislador** de electricidad, utilizado para manipulación segura?`,
-                opciones: ['Cobre', 'Aluminio', 'Goma', 'Agua'],
-                respuestaCorrecta: 'Goma'
-            }
+            // OA 1: Célula
+            { pregunta: `(OA 1) La unidad fundamental, estructural y funcional de todo ser vivo es:`, opciones: ['El órgano', 'El tejido', 'La célula', 'El sistema'], respuestaCorrecta: 'La célula' },
+            // OA 3: Sistema Digestivo
+            { pregunta: `(OA 3) ¿Dónde comienza el proceso de la digestión química de los alimentos?`, opciones: ['Estómago', 'Intestino grueso', 'Boca', 'Esófago'], respuestaCorrecta: 'Boca' },
+            // OA 4: Sistema Circulatorio
+            { pregunta: `(OA 4) ¿Cuál es el órgano principal que impulsa la sangre a todo el cuerpo?`, opciones: ['Pulmón', 'Riñón', 'Corazón', 'Hígado'], respuestaCorrecta: 'Corazón' },
+            // OA 5: Nutrientes
+            { pregunta: `(OA 5) ¿Qué tipo de nutrientes son la principal fuente de energía rápida para el cuerpo?`, opciones: ['Proteínas', 'Vitaminas', 'Carbohidratos', 'Lípidos'], respuestaCorrecta: 'Carbohidratos' },
+            // OA 5: Higiene
+            { pregunta: `(OA 5) ¿Cuál de estas acciones es un hábito de higiene para prevenir enfermedades?`, opciones: ['Comer rápido', 'Dormir poco', 'Lavarse las manos antes de comer', 'Usar el mismo pañuelo'], respuestaCorrecta: 'Lavarse las manos antes de comer' },
+            // OA 7: Ciclo del Agua (Condensación)
+            { pregunta: `(OA 7) ¿Qué etapa del ciclo del agua corresponde a la formación de las nubes?`, opciones: ['Evaporación', 'Precipitación', 'Condensación', 'Fusión'], respuestaCorrecta: 'Condensación' },
+            // OA 9: Estructura de la Tierra
+            { pregunta: `(OA 9) ¿Cuál es la capa más interna de la Tierra, compuesta principalmente de metales fundidos?`, opciones: ['Manto', 'Corteza', 'Núcleo externo', 'Núcleo interno'], respuestaCorrecta: 'Núcleo interno' },
+            // OA 10: Conductores
+            { pregunta: `(OA 10) ¿Cuál de los siguientes materiales es un buen **conductor** de electricidad?`, opciones: ['Madera', 'Vidrio', 'Cobre', 'Goma'], respuestaCorrecta: 'Cobre' },
+            // OA 11: Luz
+            { pregunta: `(OA 11) La capacidad de la luz para doblarse al pasar de un medio a otro (ej. del aire al agua) se llama:`, opciones: ['Reflexión', 'Refracción', 'Absorción', 'Espectro'], respuestaCorrecta: 'Refracción' },
+            // OA 13: Ecosistemas
+            { pregunta: `(OA 13) Los organismos que producen su propio alimento (como las plantas) son:`, opciones: ['Consumidores', 'Descomponedores', 'Productores', 'Depredadores'], respuestaCorrecta: 'Productores' },
+            // OA 1: Tejido
+            { pregunta: `(OA 1) Un conjunto de células similares que cumplen una función específica se llama:`, opciones: ['Órgano', 'Tejido', 'Sistema', 'Célula'], respuestaCorrecta: 'Tejido' },
+            // OA 3: Respiración
+            { pregunta: `(OA 3) ¿Qué gas entra a nuestro cuerpo a través del sistema respiratorio?`, opciones: ['Dióxido de carbono', 'Nitrógeno', 'Oxígeno', 'Vapor de agua'], respuestaCorrecta: 'Oxígeno' },
+            // OA 4: Sangre
+            { pregunta: `(OA 4) ¿Qué componente de la sangre transporta el oxígeno?`, opciones: ['Plasma', 'Plaquetas', 'Glóbulos blancos', 'Glóbulos rojos'], respuestaCorrecta: 'Glóbulos rojos' },
+            // OA 5: Pirámide alimenticia
+            { pregunta: `(OA 5) ¿Qué tipo de alimento debe consumirse en menor cantidad según la pirámide alimenticia?`, opciones: ['Frutas', 'Cereales', 'Aceites y dulces', 'Verduras'], respuestaCorrecta: 'Aceites y dulces' },
+            // OA 7: Agua (estado)
+            { pregunta: `(OA 7) El proceso de cambio de estado de agua líquida a vapor se llama:`, opciones: ['Fusión', 'Evaporación', 'Solidificación', 'Sublimación'], respuestaCorrecta: 'Evaporación' },
+            // OA 9: Sismos
+            { pregunta: `(OA 9) El movimiento de las placas tectónicas que provoca temblores se genera en la:`, opciones: ['Corteza', 'Atmósfera', 'Hidrosfera', 'Biosfera'], respuestaCorrecta: 'Corteza' },
+            // OA 10: Circuito en serie
+            { pregunta: `(OA 10) En un circuito **en serie**, si una ampolleta se quema, ¿qué sucede con las demás?`, opciones: ['Siguen encendidas', 'Se encienden más fuerte', 'Se apagan', 'No les afecta'], respuestaCorrecta: 'Se apagan' },
+            // OA 11: Sombra
+            { pregunta: `(OA 11) La sombra se forma porque la luz viaja en línea recta y encuentra un objeto:`, opciones: ['Transparente', 'Traslúcido', 'Opaco', 'Reflector'], respuestaCorrecta: 'Opaco' },
+            // OA 13: Cadenas tróficas
+            { pregunta: `(OA 13) ¿Qué organismo se alimenta de los productores en una cadena trófica?`, opciones: ['Consumidor secundario', 'Consumidor terciario', 'Descomponedor', 'Consumidor primario'], respuestaCorrecta: 'Consumidor primario' },
+            // OA 1: Niveles de organización
+            { pregunta: `(OA 1) El estómago, el corazón y el pulmón son ejemplos de:`, opciones: ['Células', 'Tejidos', 'Órganos', 'Sistemas'], respuestaCorrecta: 'Órganos' },
+            // OA 5: Grasas
+            { pregunta: `(OA 5) Las grasas o lípidos tienen como función principal:`, opciones: ['Reparar tejidos', 'Aportar energía de reserva', 'Regular el cuerpo', 'Transportar oxígeno'], respuestaCorrecta: 'Aportar energía de reserva' },
+            // OA 7: Lagos
+            { pregunta: `(OA 7) La mayor parte del agua dulce **líquida** accesible en la Tierra se encuentra en:`, opciones: ['Océanos', 'Glaciares', 'Lagos y ríos', 'Atmósfera'], respuestaCorrecta: 'Lagos y ríos' },
+            // OA 9: Vulcanismo
+            { pregunta: `(OA 9) El material fundido que sale de un volcán se llama:`, opciones: ['Lava', 'Magma', 'Ceniza', 'Roca ígnea'], respuestaCorrecta: 'Lava' },
+            // OA 10: Aislador
+            { pregunta: `(OA 10) ¿Qué material se usa comúnmente para aislar cables eléctricos?`, opciones: ['Hierro', 'Agua salada', 'Plástico (PVC)', 'Cobre'], respuestaCorrecta: 'Plástico (PVC)' },
+            // OA 11: Color
+            { pregunta: `(OA 11) El color que vemos en un objeto es el color que:`, opciones: ['Absorbe', 'Refleja', 'Transmite', 'Produce'], respuestaCorrecta: 'Refleja' }
         ],
         'historia': [
-            // OA 2: Conquista de Chile y América
-            {
-                pregunta: `(OA 2) ¿Qué evento bélico, liderado por Lautaro en 1553, fue un gran revés para la Conquista española en Chile?`,
-                opciones: ['Batalla de Maipú', 'Desastre de Curalaba', 'Fundación de Santiago', 'Guerra del Pacífico'],
-                respuestaCorrecta: 'Desastre de Curalaba'
-            },
-            // OA 6: Colonia y Sociedad Mestiza
-            {
-                pregunta: `(OA 6) ¿Qué término se utiliza para describir la mezcla cultural que se produjo entre españoles e indígenas durante el periodo colonial?`,
-                opciones: ['Enmienda', 'Encomienda', 'Sincretismo', 'Parlamento'],
-                respuestaCorrecta: 'Sincretismo'
-            },
-            // OA 13: Formación Ciudadana (Derechos Universales)
-            {
-                pregunta: `(OA 13) Los derechos humanos se caracterizan por ser universales, lo que significa que:`,
-                opciones: ['Solo se aplican a los ciudadanos de un país.', 'No dependen de características individuales como etnia o sexo.', 'Son otorgados solo por el Estado.', 'Solo existen en tiempos de paz.'],
-                respuestaCorrecta: 'No dependen de características individuales como etnia o sexo.'
-            }
+            // OA 1: Civilizaciones (Incas)
+            { pregunta: `(OA 1) ¿Qué civilización precolombina se desarrolló en la zona andina de Sudamérica, con capital en Cusco?`, opciones: ['Aztecas', 'Mayas', 'Incas', 'Olmecas'], respuestaCorrecta: 'Incas' },
+            // OA 2: Conquistadores
+            { pregunta: `(OA 2) ¿Quién fue el conquistador español que llegó a Chile en 1536, pero regresó a Perú debido a la pobreza y resistencia indígena?`, opciones: ['Pedro de Valdivia', 'Hernán Cortés', 'Diego de Almagro', 'Francisco Pizarro'], respuestaCorrecta: 'Diego de Almagro' },
+            // OA 3: Civilizaciones (Mayas)
+            { pregunta: `(OA 3) ¿Qué civilización es famosa por haber desarrollado un avanzado sistema de escritura, astronomía y un calendario preciso?`, opciones: ['Incas', 'Aztecas', 'Mayas', 'Mapuches'], respuestaCorrecta: 'Mayas' },
+            // OA 6: Colonia
+            { pregunta: `(OA 6) El sistema en el que se encomendaba a un español un grupo de indígenas para evangelizarlos y usarlos como mano de obra se llamó:`, opciones: ['Mita', 'Parlamento', 'Encomienda', 'Cabildo'], respuestaCorrecta: 'Encomienda' },
+            // OA 7: Legado
+            { pregunta: `(OA 7) ¿Cuál de los siguientes es un legado de las civilizaciones precolombinas a la cultura chilena?`, opciones: ['El idioma español', 'El caballo', 'El cultivo del maíz', 'La religión católica'], respuestaCorrecta: 'El cultivo del maíz' },
+            // OA 8: Zonas Naturales (Clima)
+            { pregunta: `(OA 8) ¿Qué Zona Natural de Chile se caracteriza por un clima templado y alta concentración de población?`, opciones: ['Norte Grande', 'Norte Chico', 'Zona Central', 'Zona Austral'], respuestaCorrecta: 'Zona Central' },
+            // OA 9: Recursos
+            { pregunta: `(OA 9) El recurso natural más importante de la Zona Norte de Chile es:`, opciones: ['Forestal', 'Hídrico (ríos)', 'Minero', 'Pesquero'], respuestaCorrecta: 'Minero' },
+            // OA 13: Derechos Humanos
+            { pregunta: `(OA 13) Un Derecho Humano fundamental que establece que todas las personas deben ser tratadas sin distinción es:`, opciones: ['La irresponsabilidad', 'La universalidad', 'La temporalidad', 'La indivisibilidad'], respuestaCorrecta: 'La universalidad' },
+            // OA 14: Democracia
+            { pregunta: `(OA 14) La forma de gobierno en Chile, donde los ciudadanos eligen a sus representantes, se llama:`, opciones: ['Dictadura', 'Monarquía', 'Democracia', 'Oligarquía'], respuestaCorrecta: 'Democracia' },
+            // OA 15: Poderes del Estado
+            { pregunta: `(OA 15) ¿Cuál es el Poder del Estado encargado de hacer las leyes?`, opciones: ['Poder Ejecutivo', 'Poder Judicial', 'Poder Legislativo', 'Contraloría'], respuestaCorrecta: 'Poder Legislativo' },
+            // OA 2: Resistencia
+            { pregunta: `(OA 2) El líder mapuche que organizó la resistencia en 1553, causando la muerte de Pedro de Valdivia, fue:`, opciones: ['Caupolicán', 'Lautaro', 'Tupac Amaru', 'Atahualpa'], respuestaCorrecta: 'Lautaro' },
+            // OA 6: Mestizaje
+            { pregunta: `(OA 6) ¿Cómo se denomina al proceso de mezcla cultural y racial entre españoles e indígenas?`, opciones: ['Sincretismo', 'Parlamento', 'Evangelización', 'Capitanía'], respuestaCorrecta: 'Sincretismo' },
+            // OA 8: Zonas Naturales (Sur)
+            { pregunta: `(OA 8) ¿Qué característica define la Zona Sur de Chile?`, opciones: ['Clima desértico', 'Presencia de pampas', 'Lluvias abundantes y lagos', 'Relieve muy plano'], respuestaCorrecta: 'Lluvias abundantes y lagos' },
+            // OA 13: Responsabilidades
+            { pregunta: `(OA 13) ¿Cuál de los siguientes es un **deber** de un ciudadano chileno?`, opciones: ['Viajar al extranjero', 'Obedecer las leyes', 'Tener hijos', 'Comprar un auto'], respuestaCorrecta: 'Obedecer las leyes' },
+            // OA 14: Voto
+            { pregunta: `(OA 14) El acto de elegir representantes mediante el voto se conoce como el ejercicio de la:`, opciones: ['Autoridad', 'Soberanía popular', 'Anarquía', 'Minoría'], respuestaCorrecta: 'Soberanía popular' },
+            // OA 15: Presidente
+            { pregunta: `(OA 15) El presidente de la República ejerce el:`, opciones: ['Poder Judicial', 'Poder Ejecutivo', 'Poder Legislativo', 'Poder Civil'], respuestaCorrecta: 'Poder Ejecutivo' },
+            // OA 1: Aztecas
+            { pregunta: `(OA 1) La capital del Imperio Azteca, construida sobre un lago, fue:`, opciones: ['Cusco', 'Tenochtitlán', 'Machu Picchu', 'Tikal'], respuestaCorrecta: 'Tenochtitlán' },
+            // OA 6: Sociedad colonial
+            { pregunta: `(OA 6) En la cima de la pirámide social colonial se encontraban los:`, opciones: ['Mestizos', 'Indígenas', 'Criollos', 'Españoles peninsulares'], respuestaCorrecta: 'Españoles peninsulares' },
+            // OA 8: Zona Austral
+            { pregunta: `(OA 8) Esta zona se caracteriza por fiordos, canales e islas, y un clima frío y lluvioso:`, opciones: ['Norte Chico', 'Zona Central', 'Zona Austral', 'Zona Sur'], respuestaCorrecta: 'Zona Austral' },
+            // OA 13: Institución (ONU)
+            { pregunta: `(OA 13) La organización internacional creada para mantener la paz y promover los DD.HH. es:`, opciones: ['UNESCO', 'OEA', 'ONU', 'Cruz Roja'], respuestaCorrecta: 'ONU' },
+            // OA 14: Bien común
+            { pregunta: `(OA 14) El concepto que se refiere a aquello que beneficia a toda la sociedad se llama:`, opciones: ['Interés particular', 'Derecho individual', 'Bien común', 'Poder político'], respuestaCorrecta: 'Bien común' },
+            // OA 9: Mapas
+            { pregunta: `(OA 9) ¿Cuál es el punto cardinal que se ubica generalmente en la parte superior de un mapa?`, opciones: ['Sur', 'Este', 'Norte', 'Oeste'], respuestaCorrecta: 'Norte' },
+            // OA 3: Herramientas incas
+            { pregunta: `(OA 3) El método inca para llevar el registro y la contabilidad, usando cuerdas con nudos, se llama:`, opciones: ['Chinampas', 'Quipu', 'Jeroglíficos', 'Terrazas'], respuestaCorrecta: 'Quipu' },
+            // OA 6: Evangelización
+            { pregunta: `(OA 6) El principal objetivo de la llegada de las órdenes religiosas (como jesuitas o franciscanos) a América fue:`, opciones: ['Cobrar impuestos', 'Evangelizar a los indígenas', 'Gobernar el territorio', 'Explorar ríos'], respuestaCorrecta: 'Evangelizar a los indígenas' },
+            // OA 15: Sentencias
+            { pregunta: `(OA 15) El Poder del Estado encargado de administrar justicia e interpretar las leyes es el:`, opciones: ['Ejecutivo', 'Legislativo', 'Judicial', 'Contralor'], respuestaCorrecta: 'Judicial' }
         ],
         'ingles': [
-            // OA 5: Comprensión de Lectura (Funciones - describir posición)
-            {
-                pregunta: `(OA 5) Si lees la frase: "The book is **on** the desk", ¿dónde está el libro?`,
-                opciones: ['Debajo del escritorio', 'Sobre el escritorio', 'Al lado del escritorio', 'Dentro del escritorio'],
-                respuestaCorrecta: 'Sobre el escritorio'
-            },
-            // OA 5 y 15: Vocabulario (Familia)
-            {
-                pregunta: `(OA 15) ¿Cuál es la palabra en inglés para referirse al 'padre' de tu madre?`,
-                opciones: ['Father', 'Brother', 'Grandfather', 'Uncle'],
-                respuestaCorrecta: 'Grandfather'
-            },
-            // OA 15: Expresión Escrita (Describir acciones cotidianas)
-            {
-                pregunta: `(OA 15) ¿Qué frase usarías para expresar que te gusta la pizza?`,
-                opciones: ['I don\'t like pizza.', 'I like pizza.', 'I wear pizza.', 'I sleep pizza.'],
-                respuestaCorrecta: 'I like pizza.'
-            }
+            // OA 5: Preposiciones (On)
+            { pregunta: `(OA 5) The book is **on** the desk. (¿Dónde está el libro?)`, opciones: ['Debajo del escritorio', 'Dentro del escritorio', 'Sobre el escritorio', 'Al lado del escritorio'], respuestaCorrecta: 'Sobre el escritorio' },
+            // OA 5: Preposiciones (Under)
+            { pregunta: `(OA 5) The dog is **under** the table. (¿Dónde está el perro?)`, opciones: ['Encima de la mesa', 'Debajo de la mesa', 'Al frente de la mesa', 'Detrás de la mesa'], respuestaCorrecta: 'Debajo de la mesa' },
+            // OA 15: Vocabulario (Familia)
+            { pregunta: `(OA 15) The English word for 'hermana' is:`, opciones: ['Mother', 'Brother', 'Sister', 'Grandmother'], respuestaCorrecta: 'Sister' },
+            // OA 15: Vocabulario (Aula)
+            { pregunta: `(OA 15) I write with a **pencil** and erase with an **eraser**. (Traducción de 'eraser')`, opciones: ['Lápiz', 'Goma de borrar', 'Regla', 'Cuaderno'], respuestaCorrecta: 'Goma de borrar' },
+            // OA 15: Vocabulario (Opuestos - Big)
+            { pregunta: `(OA 15) The opposite of **big** is:`, opciones: ['Tall', 'Small', 'New', 'Old'], respuestaCorrecta: 'Small' },
+            // OA 15: Verbo (Like)
+            { pregunta: `(OA 15) I **like** pizza. (Traducción de 'like')`, opciones: ['Comer', 'Gustar', 'Correr', 'Mirar'], respuestaCorrecta: 'Gustar' },
+            // OA 15: Comidas del día
+            { pregunta: `(OA 15) The first meal of the day is:`, opciones: ['Lunch', 'Dinner', 'Supper', 'Breakfast'], respuestaCorrecta: 'Breakfast' },
+            // OA 15: Pregunta (Where)
+            { pregunta: `(OA 15) **Where** do you live? (Significado de 'Where')`, opciones: ['Qué', 'Cuándo', 'Quién', 'Dónde'], respuestaCorrecta: 'Dónde' },
+            // OA 16: Clima (Sunny)
+            { pregunta: `(OA 16) If it is **sunny**, you should wear:`, opciones: ['A coat', 'A scarf', 'Sunglasses', 'Gloves'], respuestaCorrecta: 'Sunglasses' },
+            // OA 16: Ropa
+            { pregunta: `(OA 16) The word for 'pantalones' is:`, opciones: ['Shirt', 'Dress', 'Pants', 'Shoes'], respuestaCorrecta: 'Pants' },
+            // OA 5: Vocabulario (Colores)
+            { pregunta: `(OA 5) The color of the sky on a clear day is:`, opciones: ['Red', 'Green', 'Blue', 'Yellow'], respuestaCorrecta: 'Blue' },
+            // OA 15: Verbo (To be - I)
+            { pregunta: `(OA 15) Complete: I **___** a student.`, opciones: ['is', 'are', 'am', 'be'], respuestaCorrecta: 'am' },
+            // OA 15: Vocabulario (Partes de la casa)
+            { pregunta: `(OA 15) Where do you sleep? In the:`, opciones: ['Kitchen', 'Bathroom', 'Bedroom', 'Living room'], respuestaCorrecta: 'Bedroom' },
+            // OA 15: Opuestos (Happy)
+            { pregunta: `(OA 15) The opposite of **happy** is:`, opciones: ['Good', 'Sad', 'Tall', 'Fast'], respuestaCorrecta: 'Sad' },
+            // OA 15: Días de la semana
+            { pregunta: `(OA 15) The day after Tuesday is:`, opciones: ['Monday', 'Thursday', 'Friday', 'Saturday'], respuestaCorrecta: 'Thursday' },
+            // OA 16: Números
+            { pregunta: `(OA 16) How do you say 'twenty' in English?`, opciones: ['Twelve', 'Ten', 'Twenty', 'Two'], respuestaCorrecta: 'Twenty' },
+            // OA 15: Preposiciones (In)
+            { pregunta: `(OA 15) The toys are **in** the box. (Significado de 'in')`, opciones: ['Fuera de', 'Cerca de', 'Detrás de', 'Dentro de'], respuestaCorrecta: 'Dentro de' },
+            // OA 15: Posesivos (My)
+            { pregunta: `(OA 15) This is **my** jacket. (Significado de 'my')`, opciones: ['Tu', 'Su (de él)', 'Mi', 'Nuestro'], respuestaCorrecta: 'Mi' },
+            // OA 16: Clima (Rainy)
+            { pregunta: `(OA 16) If it is **rainy**, the weather is:`, opciones: ['Seco', 'Mojado', 'Caluroso', 'Soleado'], respuestaCorrecta: 'Mojado' },
+            // OA 15: Partes del cuerpo
+            { pregunta: `(OA 15) The word for 'mano' is:`, opciones: ['Foot', 'Head', 'Hand', 'Arm'], respuestaCorrecta: 'Hand' },
+            // OA 15: Comida (Verdura)
+            { pregunta: `(OA 15) Which one is a vegetable?`, opciones: ['Apple', 'Chicken', 'Tomato', 'Milk'], respuestaCorrecta: 'Tomato' },
+            // OA 15: Escuela
+            { pregunta: `(OA 15) Where can you read books in the school?`, opciones: ['Classroom', 'Playground', 'Library', 'Cafeteria'], respuestaCorrecta: 'Library' },
+            // OA 15: Comida (Bebida)
+            { pregunta: `(OA 15) Which one is a drink?`, opciones: ['Bread', 'Cheese', 'Juice', 'Fish'], respuestaCorrecta: 'Juice' },
+            // OA 15: Opuestos (Young)
+            { pregunta: `(OA 15) The opposite of **young** is:`, opciones: ['New', 'Old', 'Tall', 'Short'], respuestaCorrecta: 'Old' },
+            // OA 15: Colores
+            { pregunta: `(OA 15) The color of grass is:`, opciones: ['Red', 'Green', 'Yellow', 'Black'], respuestaCorrecta: 'Green' }
         ]
     };
 
-    // --- FUNCIONES DEL TEMPORIZADOR ---
+    // --- FUNCIONES DEL TEMPORIZADOR Y SIMULACIÓN ---
 
     /**
      * Alterna la activación/desactivación del temporizador.
-     * Actualiza el texto del botón y el estado de la variable global.
      */
     function toggleTimer() {
         timerEnabled = !timerEnabled;
         const toggleBtn = document.getElementById('timer-toggle-btn');
         if (timerEnabled) {
             toggleBtn.textContent = 'Desactivar Temporizador ⏱️';
-            // Mostrar si estamos en una prueba, de lo contrario, ocultar.
             if (currentAsignatura) {
                 document.getElementById('timer-display').style.display = 'block';
                 startTimer();
@@ -289,7 +444,7 @@
      * Inicia el contador de 90 minutos.
      */
     function startTimer() {
-        clearInterval(timerInterval); // Asegura que no haya múltiples intervalos
+        clearInterval(timerInterval);
         timeLeft = DURACION_MAXIMA;
         updateTimerDisplay();
         
@@ -299,8 +454,8 @@
             
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
-                alert("¡Tiempo finalizado! La prueba ha terminado.");
-                corregirPrueba(); // Corregir automáticamente al terminar el tiempo
+                alert("¡Tiempo finalizado! La prueba ha terminado automáticamente.");
+                corregirPrueba();
             }
         }, 1000);
     }
@@ -322,11 +477,8 @@
         document.getElementById('timer-display').textContent = `Tiempo restante: ${display}`;
     }
 
-    // --- FUNCIONES DE LA SIMULACIÓN ---
-
     /**
      * Inicia la simulación de la prueba para una asignatura.
-     * @param {string} asignatura - La clave de la asignatura.
      */
     function iniciarPrueba(asignatura) {
         currentAsignatura = asignatura;
@@ -340,24 +492,27 @@
 
         document.getElementById('menu-principal').style.display = 'none';
         document.getElementById('prueba-area').style.display = 'block';
-        document.getElementById('nombre-asignatura').textContent = `Prueba de ${nombreFormal}`;
+        document.getElementById('nombre-asignatura').textContent = `Prueba de ${nombreFormal} (25 Preguntas)`;
 
         if (timerEnabled) {
             document.getElementById('timer-display').style.display = 'block';
             startTimer();
         }
 
+        // Eliminar resumen anterior si existe
+        const resumen = document.getElementById('resumen-resultados');
+        if (resumen) resumen.remove();
+
         cargarPreguntas(asignatura);
     }
 
     /**
-     * Carga las preguntas de la asignatura seleccionada en la interfaz.
-     * @param {string} asignatura - La clave de la asignatura.
+     * Carga las preguntas de la asignatura seleccionada.
      */
     function cargarPreguntas(asignatura) {
         const preguntas = bancoDePreguntas[asignatura];
         const container = document.getElementById('preguntas-container');
-        container.innerHTML = ''; // Limpiar preguntas anteriores
+        container.innerHTML = ''; // Limpiar
 
         preguntas.forEach((p, index) => {
             const numPregunta = index + 1;
@@ -383,17 +538,20 @@
     }
 
     /**
-     * Procesa y muestra los resultados de la prueba actual.
+     * Procesa y muestra los resultados de la prueba actual, destacando las correctas.
      */
     function corregirPrueba() {
+        if (!currentAsignatura) {
+            alert("No hay una prueba activa para corregir.");
+            return;
+        }
+
         if (timerEnabled) {
             stopTimer();
         }
 
         const preguntas = bancoDePreguntas[currentAsignatura];
         let correctas = 0;
-        const resultadosContainer = document.createElement('div');
-        resultadosContainer.innerHTML = '<h2>Resultados</h2>';
         
         preguntas.forEach((p, index) => {
             const numPregunta = index + 1;
@@ -402,25 +560,27 @@
             const preguntaDiv = document.getElementById(`pregunta-${numPregunta}`);
             const esCorrecta = respuestaSeleccionada && respuestaSeleccionada.value === p.respuestaCorrecta;
 
-            // Mostrar el resultado en la pregunta
-            const resultadoHTML = document.createElement('p');
-            resultadoHTML.className = 'respuesta-correcta';
-            resultadoHTML.textContent = `Respuesta Correcta: ${p.respuestaCorrecta}`;
-            
+            let resultadoHTML = preguntaDiv.querySelector('.respuesta-correcta');
+            if (!resultadoHTML) {
+                 resultadoHTML = document.createElement('p');
+                 resultadoHTML.className = 'respuesta-correcta';
+                 preguntaDiv.appendChild(resultadoHTML);
+            }
+
+            // Aplicar estilo de corrección
             if (esCorrecta) {
                 correctas++;
                 preguntaDiv.style.backgroundColor = '#e6ffe6'; // Verde claro
             } else {
                 preguntaDiv.style.backgroundColor = '#ffe6e6'; // Rojo claro
             }
-
-            // Evitar duplicar el mensaje si se corrige dos veces
-            if (!preguntaDiv.querySelector('.respuesta-correcta')) {
-                 preguntaDiv.appendChild(resultadoHTML);
-            }
+            resultadoHTML.textContent = `Respuesta Correcta: ${p.respuestaCorrecta}${esCorrecta ? '' : ` | Tu respuesta: ${respuestaSeleccionada ? respuestaSeleccionada.value : 'No contestada'}`}`;
         });
 
-        resultadosContainer.innerHTML += `<p>Obtuviste **${correctas}** respuestas correctas de **${preguntas.length}**.</p>`;
+        // Generar resumen
+        const resultadosContainer = document.createElement('div');
+        resultadosContainer.innerHTML = '<h2>Resultados de la Prueba</h2>';
+        resultadosContainer.innerHTML += `<p style="font-size:1.5em; font-weight: bold;">Obtuviste **${correctas}** respuestas correctas de **${preguntas.length}**.</p>`;
         
         // Agregar el resumen al inicio de la prueba
         const pruebaArea = document.getElementById('prueba-area');
@@ -446,24 +606,22 @@
         document.getElementById('menu-principal').style.display = 'grid';
         document.getElementById('prueba-area').style.display = 'none';
         document.getElementById('timer-display').style.display = 'none';
-
+        
         // Eliminar el resumen de resultados si existe
         const resumen = document.getElementById('resumen-resultados');
-        if (resumen) {
-            resumen.remove();
-        }
+        if (resumen) resumen.remove();
     }
 
     /**
-     * Muestra todas las respuestas correctas para todas las asignaturas.
+     * Muestra todas las respuestas correctas para todas las asignaturas en una ventana nueva.
      */
     function mostrarRespuestasGeneral() {
         if (currentAsignatura) {
-            alert("Debes terminar o salir de la prueba actual para ver las respuestas de todas las asignaturas.");
-            return;
+            alert("Saliendo de la prueba actual para ver el resumen de respuestas.");
+            volverAlMenu(); 
         }
 
-        let resumenRespuestas = '<h2>Respuestas Correctas por Asignatura:</h2>';
+        let resumenRespuestas = '<h2>Respuestas Correctas (Resumen General de 125 Preguntas)</h2>';
         
         for (const asignaturaKey in bancoDePreguntas) {
             const preguntas = bancoDePreguntas[asignaturaKey];
@@ -475,20 +633,24 @@
                 'ingles': 'Inglés'
             }[asignaturaKey];
 
-            resumenRespuestas += `<h3>${nombreAsignatura}</h3><ul>`;
-            preguntas.forEach((p, index) => {
-                resumenRespuestas += `<li>**Pregunta ${index + 1}:** ${p.pregunta} | **Respuesta Correcta:** ${p.respuestaCorrecta}</li>`;
+            resumenRespuestas += `<h3>${nombreAsignatura} (${preguntas.length} preguntas)</h3><ol>`;
+            preguntas.forEach((p) => {
+                resumenRespuestas += `<li>**P:** ${p.pregunta} | **R. Correcta:** <span style="color: green;">${p.respuestaCorrecta}</span></li>`;
             });
-            resumenRespuestas += '</ul>';
+            resumenRespuestas += '</ol>';
         }
 
-        // Crear una nueva ventana/pestaña para mostrar el resumen, para no interferir con la simulación.
-        const nuevaVentana = window.open('', 'Respuestas', 'width=700,height=600');
+        // Crear una nueva ventana/pestaña para mostrar el resumen
+        const nuevaVentana = window.open('', 'Respuestas', 'width=800,height=600');
         nuevaVentana.document.write(`
             <html>
             <head>
-                <title>Respuestas Correctas</title>
-                <style>body { font-family: Arial, sans-serif; padding: 20px; }</style>
+                <title>Respuestas Correctas 5° Básico</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    h3 { color: #d9534f; border-bottom: 1px dashed #ccc; padding-top: 10px; }
+                    ol li { margin-bottom: 15px; font-size: 0.9em; }
+                </style>
             </head>
             <body>${resumenRespuestas}</body>
             </html>
