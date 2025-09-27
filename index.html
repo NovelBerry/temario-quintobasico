@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Pruebas - Quinto Básico (125 Preguntas)</title>
+    
+    <style>
+        /* --- ESTILOS DE TERMINAL --- */
+        body {
+            background-color: #000000;
+            color: #ff3333; /* Rojo Neón Suave */
+            font-family: 'Consolas', 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            padding: 40px;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.7);
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.85);
+            max-width: 850px;
+            width: 90%;
+            text-align: left;
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: #ff6666;
+            text-shadow: 0 0 10px #ff0000;
+            font-size: 2em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        /* --- ESTILOS DEL PORTAL DE ACCESO --- */
+        #access-portal h1 { margin-top: 0; }
+        .warning-text {
+            font-size: 1.2em;
+            text-transform: uppercase;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #ff6666;
+            text-align: center;
+        }
+        #portal-input { 
+            width: 80%; 
+            padding: 12px;
+            margin: 15px auto 10px auto;
+            border: 1px solid #ff0000; 
+            background-color: #0d0d0d;
+            color: #ffffff;
+            font-size: 1.5em;
+            text-align: center;
+            border-radius: 3px;
+            box-shadow: 0 0 10px #ff0000;
+            outline: none;
+            display: block;
+        }
+        #submit-button {
+            padding: 12px 25px;
+            background-color: #1a0000;
+            color: #ff6666;
+            border: 2px solid #ff0000;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            text-shadow: 0 0 5px #ff0000;
+            display: block;
+            margin: 0 auto;
+        }
+        #submit-button:hover { background-color: #330000; box-shadow: 0 0 20px #ff3333; color: #ffffff; }
+        #portal-message { margin-top: 25px; font-size: 1.2em; height: 20px; text-shadow: 0 0 5px; text-align: center; }
+        .success { color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .denied { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+        .details { font-size: 0.9em; color: #ff0000; margin-top: 20px; text-align: center; }
+
+        /* --- ESTILOS DE LA PRUEBA --- */
+        #quiz-container { display: none; }
+        .quiz-title { text-align: center; color: #00ff00; text-shadow: 0 0 10px #00ff00; margin-bottom: 30px; }
+        .question-block { border: 1px solid #1a0000; padding: 15px; margin-bottom: 20px; border-radius: 3px; }
+        .question-text { color: #ffffff; font-size: 1.1em; margin-bottom: 10px; }
+        .option-label { display: block; margin: 8px 0; color: #ff3333; cursor: pointer; }
+        .option-label:hover { color: #00ff00; }
+        input[type="radio"] { margin-right: 10px; }
+        #submit-quiz-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 30px;
+            background-color: #003300;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            font-weight: bold;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            transition: background-color 0.2s;
+        }
+        #submit-quiz-button:hover { background-color: #005500; }
+
+        /* --- ESTILOS DE RESULTADO Y RETROALIMENTACIÓN --- */
+        #results-container { display: none; text-align: left; }
+        #final-score { text-align: center; font-size: 1.8em; margin-bottom: 30px; }
+        .review-question { border: 2px solid #333; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
+        .review-question h3 { color: #ffffff; margin-top: 0; }
+        .user-answer { color: #ffff00; }
+        .correct-answer { color: #00ff00; font-weight: bold; }
+        .feedback { color: #ff3333; }
+        .explanation { border-left: 3px solid #00ff00; padding-left: 10px; margin-top: 10px; font-size: 0.9em; color: #cccccc; }
+        .result-correct { background-color: rgba(0, 100, 0, 0.2); }
+        .result-incorrect { background-color: rgba(100, 0, 0, 0.2); }
+        .retry-button {
+            display: block;
+            width: 50%;
+            margin: 30px auto 0;
+            padding: 10px;
+            background-color: #330000;
+            color: #ff6666;
+            border: 2px solid #ff0000;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="access-portal" class="container">
+        <h1>[ ACCESO A SIMULACIÓN DE PRUEBAS 5° BÁSICO ]</h1>
+        <p class="warning-text">
+            INTRODUZCA LA CLAVE ÚNICA DE LA ASIGNATURA PARA INICIAR:
+        </p>
+        
+        <input type="password" id="portal-input" placeholder="[CÓDIGO DE ACCESO]" autofocus> 
+        
+        <button id="submit-button">AUTENTICAR</button> 
+        
+        <div id="portal-message"></div> 
+
+        <div class="details">
+            <p>* Pruebas completas: 25 preguntas por asignatura, con respuestas detalladas.</p>
+            <p>** Claves de prueba: PRUEBALENGUA5, PRUEBAMATE5, PRUEBACIENCIAS5, PRUEBAINGLES5, PRUEBAHISTORIA5</p>
+        </div>
+    </div>
+
+    <div id="quiz-container" class="container">
+        <h2 id="quiz-title" class="quiz-title"></h2>
+        <form id="quiz-form">
+            </form>
+        <button id="submit-quiz-button">TERMINAR PRUEBA Y REVISAR</button>
+    </div>
+
+    <div id="results-container" class="container">
+        <h2 class="quiz-title">RESULTADOS DE LA PRUEBA</h2>
+        <div id="final-score"></div>
+        <h3 style="color: #ffcc00; border-bottom: 1px solid #333; padding-bottom: 10px;">Revisión Detallada (Pregunta por Pregunta)</h3>
+        <div id="review-area">
+            </div>
+        <button class="retry-button" onclick="window.location.reload()">VOLVER AL PORTAL DE ACCESO</button>
+    </div>
+
+    <script>
+        // --- 1. DATOS DE LAS PRUEBAS (QUIZ DATA) ---
+        // Contiene 5 pruebas de 25 preguntas cada una (125 preguntas total) con respuestas detalladas.
+        const quizData = {
+            // ====================================================================================
+            // PRUEBA 1: LENGUAJE Y COMUNICACIÓN (25 PREGUNTAS)
+            // ====================================================================================
+            "PRUEBALENGUA5": {
+                title: "LENGUAJE Y COMUNICACIÓN (5° BÁSICO)",
+                questions: [
+                    {
+                        q: "Un texto que busca entretener al lector presentando una secuencia de hechos imaginarios que involucran a personajes en un ambiente específico se clasifica como:",
+                        options: { A: "Informativo.", B: "Lírico.", C: "Narrativo.", D: "Dramático." },
+                        answer: "C",
+                        explanation: "Los textos narrativos, como cuentos y novelas, tienen como propósito relatar una historia. El género Lírico expresa sentimientos, el Informativo entrega datos y el Dramático es para ser representado."
+                    },
+                    {
+                        q: "Al leer un cómic o historieta, la información que se encuentra DENTRO de un globo de diálogo corresponde a:",
+                        options: { A: "Las descripciones del narrador.", B: "Las acotaciones.", C: "La voz en off.", D: "La intervención directa de un personaje." },
+                        answer: "D",
+                        explanation: "El globo de diálogo es el recurso gráfico que se utiliza en el cómic para indicar lo que un personaje dice o piensa, representando su intervención directa."
+                    },
+                    {
+                        q: "En el verso 'Las flores bailan con el viento', se utiliza la figura retórica conocida como:",
+                        options: { A: "Comparación.", B: "Metáfora.", C: "Personificación.", D: "Hipérbole." },
+                        answer: "C",
+                        explanation: "La Personificación atribuye cualidades o acciones humanas (como 'bailar') a objetos o seres inanimados (como 'las flores')."
+                    },
+                    {
+                        q: "El verbo 'vivir' conjugado en **PRETÉRITO IMPERFECTO** (pasado que no tiene fin) en primera persona singular (Yo) es:",
+                        options: { A: "Yo viví.", B: "Yo viviré.", C: "Yo vivía.", D: "Yo he vivido." },
+                        answer: "C",
+                        explanation: "El pretérito imperfecto describe una acción pasada que se extiende en el tiempo o se repite, terminando en -aba o -ía. Para 'vivir' es 'Yo vivía'."
+                    },
+                    {
+                        q: "Si en un texto la palabra 'grande' se reemplaza por su sinónimo 'enorme', el cambio léxico busca:",
+                        options: { A: "Aumentar el valor afectivo.", B: "Mantener la coherencia.", C: "Dar mayor precisión o intensidad.", D: "Cambiar el tiempo verbal." },
+                        answer: "C",
+                        explanation: "Los sinónimos pueden ser utilizados para dar mayor intensidad, precisión o matiz al mensaje sin alterar el significado central de la frase."
+                    },
+                    {
+                        q: "¿Cuál es la función principal de la **Introducción** en la mayoría de los textos (informativos, narrativos o argumentativos)?",
+                        options: { A: "Desarrollar la idea principal.", B: "Presentar el tema o personajes.", C: "Cerrar el conflicto.", D: "Incluir la bibliografía." },
+                        answer: "B",
+                        explanation: "La introducción tiene como objetivo principal presentar el tema que se va a tratar, la tesis o a los personajes que participarán en la narración, enganchando al lector."
+                    },
+                    {
+                        q: "El significado implícito de un texto es aquel que:",
+                        options: { A: "Se encuentra escrito de forma clara y literal.", B: "Debe ser inferido por el lector a partir de pistas.", C: "Corresponde únicamente al título del texto.", D: "Es la opinión personal del autor." },
+                        answer: "B",
+                        explanation: "La información implícita no está escrita, sino que el lector debe **inferir**la o deducirla basándose en el contexto y las pistas entregadas por el texto."
+                    },
+                    {
+                        q: "¿Cuál de las siguientes es una característica propia del **Género Lírico**?",
+                        options: { A: "La presencia de un narrador omnisciente.", B: "La expresión de sentimientos y emociones.", C: "La división en actos y escenas.", D: "El desarrollo de un conflicto central." },
+                        answer: "B",
+                        explanation: "El género lírico (poemas, canciones) se enfoca en la **expresión subjetiva** de los sentimientos, emociones y estados de ánimo del hablante lírico."
+                    },
+                    {
+                        q: "Identifica el adjetivo posesivo correcto para completar la frase: 'Ella olvidó _______ libro en la escuela'.",
+                        options: { A: "sus.", B: "su.", C: "nuestros.", D: "mío." },
+                        answer: "B",
+                        explanation: "El adjetivo posesivo 'su' concuerda en singular y se refiere a una posesión de 'ella'. 'Sus' es plural, 'nuestros' es posesión de 'nosotros', y 'mío' no calza gramaticalmente."
+                    },
+                    {
+                        q: "En una carta formal dirigida al director del colegio, ¿qué elemento debe ir obligatoriamente ANTES de la firma?",
+                        options: { A: "El Asunto de la carta.", B: "El Saludo inicial.", C: "La despedida (Fórmula de cortesía).", D: "La fecha." },
+                        answer: "C",
+                        explanation: "La estructura de una carta formal requiere que la **Despedida** (ej: Atentamente, Cordialmente) preceda a la firma del emisor."
+                    },
+                    {
+                        q: "El **Tema Central** de un texto narrativo se define como:",
+                        options: { A: "La primera oración de la introducción.", B: "El resumen de la historia.", C: "La idea fundamental o mensaje principal que subyace en la obra.", D: "El nombre del personaje principal." },
+                        answer: "C",
+                        explanation: "El tema es la idea abstracta y principal que da sentido al texto (ej: el amor, la justicia, la aventura), y debe ser inferido por el lector."
+                    },
+                    {
+                        q: "¿Qué tipo de texto cumple la función de **instruir** o guiar al lector en la realización de una tarea?",
+                        options: { A: "Un afiche publicitario.", B: "Una receta de cocina.", C: "Un cuento de ciencia ficción.", D: "Una biografía." },
+                        answer: "B",
+                        explanation: "Las recetas, manuales o instructivos tienen como propósito primordial instruir al receptor, indicando pasos a seguir de forma ordenada."
+                    },
+                    {
+                        q: "La parte del texto narrativo donde se soluciona el conflicto y se establece una nueva situación para los personajes se denomina:",
+                        options: { A: "Nudo.", B: "Desenlace.", C: "Clímax.", D: "Planteamiento." },
+                        answer: "B",
+                        explanation: "El **Desenlace** (o final) es el momento de la historia donde se resuelve el conflicto central presentado en el Nudo."
+                    },
+                    {
+                        q: "¿Qué función cumple el punto seguido (.) en un texto?",
+                        options: { A: "Separar párrafos y cambiar de idea.", B: "Terminar completamente un texto.", C: "Separar oraciones dentro de un mismo párrafo, manteniendo la misma idea.", D: "Marcar una pausa breve dentro de una oración." },
+                        answer: "C",
+                        explanation: "El punto seguido separa oraciones dentro del mismo párrafo, mientras que el punto aparte separa párrafos y el punto final termina el texto."
+                    },
+                    {
+                        q: "En la expresión 'El sol es una naranja gigante', se utiliza la figura literaria de:",
+                        options: { A: "Comparación (Símil).", B: "Metáfora.", C: "Personificación.", D: "Hipérbole." },
+                        answer: "B",
+                        explanation: "La Metáfora consiste en la identificación de un elemento con otro para expresar una semejanza (Sol = naranja gigante) sin usar nexos como 'como' (a diferencia de la Comparación)."
+                    },
+                    {
+                        q: "Identifica la palabra que actúa como **adverbio de tiempo** en la siguiente oración: 'El bus llegó *tarde* a la estación'.",
+                        options: { A: "El.", B: "bus.", C: "tarde.", D: "estación." },
+                        answer: "C",
+                        explanation: "El adverbio 'tarde' modifica al verbo 'llegó' e indica **cuándo** ocurrió la acción (tiempo). Otros adverbios de tiempo son: mañana, ahora, luego, siempre."
+                    },
+                    {
+                        q: "La palabra 'inmóvil' (que no se mueve) está formada por el prefijo 'in-', cuyo significado es:",
+                        options: { A: "Repetición.", B: "Antes de.", C: "Negación o privación.", D: "Junto a." },
+                        answer: "C",
+                        explanation: "El prefijo **in-** o **i-** se utiliza en español para indicar **negación, privación o lo contrario** de la palabra base (ej: incapaz, ilógico, inmóvil)."
+                    },
+                    {
+                        q: "¿Cuál de estos elementos NO forma parte de la estructura interna de la mayoría de los textos narrativos?",
+                        options: { A: "Nudo (desarrollo).", B: "Desenlace (final).", C: "Escenas (propio del teatro).", D: "Planteamiento (introducción)." },
+                        answer: "C",
+                        explanation: "Las Escenas son divisiones estructurales propias del **Género Dramático** (obras de teatro), no de los textos narrativos."
+                    },
+                    {
+                        q: "La **biografía** tiene como propósito central:",
+                        options: { A: "Convencer al lector de una idea.", B: "Relatar la vida de una persona real.", C: "Expresar sentimientos profundos.", D: "Instruir sobre un tema científico." },
+                        answer: "B",
+                        explanation: "La biografía es un texto informativo-narrativo cuyo propósito es contar la historia y hechos relevantes de la vida de una persona real."
+                    },
+                    {
+                        q: "La **concordancia nominal** se refiere a la relación de género y número entre:",
+                        options: { A: "El verbo y el adverbio.", B: "El sujeto y el predicado.", C: "El artículo, el sustantivo y el adjetivo.", D: "La preposición y el sustantivo." },
+                        answer: "C",
+                        explanation: "La concordancia nominal requiere que el artículo, el sustantivo y el adjetivo coincidan en **género** (masculino/femenino) y **número** (singular/plural). Ejemplo: *Las flores rojas*."
+                    },
+                    {
+                        q: "¿Qué tipo de texto debe ser leído con la intención de **obtener información específica** y detallada sobre un evento reciente?",
+                        options: { A: "Un diario de vida.", B: "Un poema épico.", C: "Una noticia.", D: "Una fábula." },
+                        answer: "C",
+                        explanation: "La **Noticia** es un texto informativo que busca entregar datos verídicos y específicos sobre un hecho de actualidad, por lo que se lee para obtener información."
+                    },
+                    {
+                        q: "Si en un cuento un personaje dice: 'Ella era tan rápida *como* un rayo', está utilizando un:",
+                        options: { A: "Símil (Comparación).", B: "Metáfora.", C: "Hipérbole.", D: "Eufemismo." },
+                        answer: "A",
+                        explanation: "El **Símil** (o Comparación) establece una relación de semejanza entre dos elementos utilizando un nexo comparativo como *como*, *parecido a*, *igual que*."
+                    },
+                    {
+                        q: "¿Cuál es la **función principal** del hablante lírico en un poema?",
+                        options: { A: "Contar una historia.", B: "Argumentar una idea.", C: "Expresar su interioridad y sentimientos.", D: "Dar instrucciones para una acción." },
+                        answer: "C",
+                        explanation: "El **Hablante Lírico** es la voz ficticia dentro del poema que se encarga de manifestar los sentimientos y emociones del autor, que es el propósito esencial del género lírico."
+                    },
+                    {
+                        q: "La palabra 'deshacer' (que significa revertir la acción de hacer) utiliza el prefijo 'des-', cuyo significado es:",
+                        options: { A: "Posterioridad.", B: "Acción contraria.", C: "Unión.", D: "Dentro de." },
+                        answer: "B",
+                        explanation: "El prefijo **des-** se emplea para indicar **acción contraria** o la negación de la acción expresada por la raíz (hacer → deshacer)."
+                    },
+                    {
+                        q: "Identifica la opción donde el verbo 'jugar' está conjugado correctamente en **Presente Simple** (indicando una acción habitual) en tercera persona singular (Él/Ella):",
+                        options: { A: "Ella jugó.", B: "Él jugaría.", C: "Ella juega.", D: "Él jugar." },
+                        answer: "C",
+                        explanation: "La conjugación correcta de los verbos regulares en presente simple en tercera persona singular es: Él/Ella **juega** (infinitivo: jugar)."
+                    }
+                ]
+            },
+
+            // ====================================================================================
+            // PRUEBA 2: MATEMÁTICA (25 PREGUNTAS)
+            // ====================================================================================
+            "PRUEBAMATE5": {
+                title: "MATEMÁTICA (5° BÁSICO)",
+                questions: [
+                    {
+                        q: "¿Cuál es el valor posicional del dígito 7 en el número 47.852.103?",
+                        options: { A: "7 Decenas de Mil.", B: "7 Unidades de Millón.", C: "7 Centenas de Mil.", D: "7 Decenas de Millón." },
+                        answer: "B",
+                        explanation: "El número 47.852.103 se lee: cuarenta y **siete millones** (7 millones). El dígito 7 se encuentra en la posición de las **Unidades de Millón**."
+                    },
+                    {
+                        q: "Si se tiene la operación 8.540 + 1.250, y se redondea cada sumando a la centena más cercana, el resultado aproximado es:",
+                        options: { A: "9.700", B: "9.800", C: "9.600", D: "9.500" },
+                        answer: "B",
+                        explanation: "8.540 se redondea a 8.500. 1.250 se redondea a 1.300 (el 5 sube). 8.500 + 1.300 = **9.800**."
+                    },
+                    {
+                        q: "¿Cuál es el resultado de 350 multiplicado por 20?",
+                        options: { A: "7.000", B: "700", C: "3.520", D: "70.000" },
+                        answer: "A",
+                        explanation: "Para multiplicar 350 x 20, se multiplica 35 x 2 = 70, y luego se añaden los dos ceros: **7.000**."
+                    },
+                    {
+                        q: "¿Qué fracción es equivalente a 3/4?",
+                        options: { A: "6/10", B: "9/12", C: "3/8", D: "1/4" },
+                        answer: "B",
+                        explanation: "Para obtener una fracción equivalente, se multiplica el numerador y el denominador por el mismo número. Si multiplicamos 3/4 por 3, obtenemos **9/12**."
+                    },
+                    {
+                        q: "El área de un rectángulo es 48 cm². Si uno de sus lados mide 6 cm, ¿cuál es la medida del lado faltante (ancho)?",
+                        options: { A: "8 cm", B: "6 cm", C: "12 cm", D: "24 cm" },
+                        answer: "A",
+                        explanation: "El área se calcula como Largo x Ancho. Si 48 cm² = 6 cm * Ancho, entonces Ancho = 48 / 6 = **8 cm**."
+                    },
+                    {
+                        q: "Si 5 estudiantes comparten 2 pizzas de manera equitativa, ¿qué fracción de pizza recibe cada uno?",
+                        options: { A: "5/2", B: "2/5", C: "1/5", D: "2/10" },
+                        answer: "B",
+                        explanation: "Se reparten 2 pizzas entre 5 personas. La operación es 2 ÷ 5, lo que se representa como la fracción **2/5**."
+                    },
+                    {
+                        q: "¿Cuál es el resultado de la siguiente división: 485 ÷ 5?",
+                        options: { A: "90", B: "97", C: "85", D: "107" },
+                        answer: "B",
+                        explanation: "485 dividido por 5 es **97**. (48 ÷ 5 = 9 con resto 3. Se baja el 5, 35 ÷ 5 = 7)."
+                    },
+                    {
+                        q: "¿Qué número decimal representa la fracción 1/2?",
+                        options: { A: "0.1", B: "0.25", C: "0.5", D: "1.2" },
+                        answer: "C",
+                        explanation: "La fracción 1/2 es equivalente a la mitad de 1. Al dividir 1 entre 2 se obtiene **0.5**."
+                    },
+                    {
+                        q: "La propiedad conmutativa en la multiplicación establece que:",
+                        options: { A: "Al multiplicar por cero, el resultado es cero.", B: "El orden de los factores no altera el producto.", C: "Se puede agrupar los factores de diferentes maneras sin alterar el producto.", D: "La multiplicación se distribuye sobre la suma." },
+                        answer: "B",
+                        explanation: "La **propiedad conmutativa** indica que $a \times b = b \times a$. El orden de los números multiplicados (factores) no cambia el resultado (producto)."
+                    },
+                    {
+                        q: "El perímetro de un cuadrado que tiene un lado de 12 cm es:",
+                        options: { A: "144 cm", B: "24 cm", C: "48 cm", D: "36 cm" },
+                        answer: "C",
+                        explanation: "El perímetro es la suma de todos los lados. Un cuadrado tiene 4 lados iguales, por lo tanto, $4 \times 12 \text{ cm} = \mathbf{48 \text{ cm}}$."
+                    },
+                    {
+                        q: "Al comparar los números 3.456.789 y 3.457.000, ¿cuál es la relación correcta?",
+                        options: { A: "3.456.789 = 3.457.000", B: "3.456.789 > 3.457.000", C: "3.456.789 < 3.457.000", D: "La diferencia es 100." },
+                        answer: "C",
+                        explanation: "Al comparar dígito por dígito, en la posición de las unidades de mil, 6 < 7. Por lo tanto, **3.456.789 es menor que 3.457.000**."
+                    },
+                    {
+                        q: "¿Cuál es la forma expandida del número 2.508.310?",
+                        options: { A: "$2 \times 100 + 5 \times 10 + 8 \times 1 + 3 \times 0 + 10$", B: "$2 \times 1.000.000 + 5 \times 100.000 + 8 \times 1.000 + 3 \times 100 + 1 \times 10$", C: "$200.000 + 50.000 + 8.000 + 300 + 10$", D: "$2 \times 1.000.000 + 5 \times 10.000 + 8 \times 1.000 + 3 \times 100 + 1 \times 10$" },
+                        answer: "B",
+                        explanation: "La forma expandida según valor posicional es: (2 U.M.) + (5 C. de M.) + (0 D. de M.) + (8 U. de M.) + (3 C) + (1 D) + (0 U). Esto corresponde a: $\\mathbf{2 \\times 1.000.000 + 5 \\times 100.000 + 8 \\times 1.000 + 3 \\times 100 + 1 \\times 10}$."
+                    },
+                    {
+                        q: "El resultado de la sustracción 10.000 - 3.567 es:",
+                        options: { A: "6.433", B: "7.433", C: "6.543", D: "7.567" },
+                        answer: "A",
+                        explanation: "Al restar 10.000 - 3.567 se obtiene **6.433**."
+                    },
+                    {
+                        q: "¿Qué figura 3D tiene exactamente 6 caras cuadradas o rectangulares, 12 aristas y 8 vértices?",
+                        options: { A: "Pirámide.", B: "Cilindro.", C: "Cubo o Paralelepípedo.", D: "Cono." },
+                        answer: "C",
+                        explanation: "El **Cubo** y el **Paralelepípedo** son cuerpos geométricos que cumplen con estas características. Ambos son prismas rectangulares."
+                    },
+                    {
+                        q: "¿Cuál es la relación correcta entre $3/5$ y $7/10$?",
+                        options: { A: "$3/5 > 7/10$", B: "$3/5 < 7/10$", C: "$3/5 = 7/10$", D: "$3/5 + 7/10 = 1$" },
+                        answer: "B",
+                        explanation: "Para comparar, se deben igualar los denominadores. $3/5$ es equivalente a $6/10$. Dado que $6/10 < 7/10$, la relación correcta es $\\mathbf{3/5 < 7/10}$."
+                    },
+                    {
+                        q: "El valor de la expresión $25 + 5 \\times 3 - 10$ es:",
+                        options: { A: "80", B: "100", C: "30", D: "40" },
+                        answer: "C",
+                        explanation: "Siguiendo el orden de las operaciones (PAPOMUDAS/PEMDAS), primero se hace la multiplicación: $25 + (5 \\times 3) - 10 = 25 + 15 - 10 = 40 - 10 = \\mathbf{30}$."
+                    },
+                    {
+                        q: "¿Qué porcentaje representa $1/4$ de una cantidad?",
+                        options: { A: "10%", B: "20%", C: "25%", D: "40%" },
+                        answer: "C",
+                        explanation: "La fracción $1/4$ representa una cuarta parte de un todo, que en porcentaje es $\\mathbf{25\\%}$ ($1 \div 4 \times 100 = 25$)."
+                    },
+                    {
+                        q: "Si un polígono tiene 4 lados de igual medida y 4 ángulos rectos (90°), se trata de un:",
+                        options: { A: "Rombo.", B: "Trapecio.", C: "Cuadrado.", D: "Rectángulo." },
+                        answer: "C",
+                        explanation: "Un **Cuadrado** es el único cuadrilátero que tiene tanto sus 4 lados iguales como sus 4 ángulos rectos (90°)."
+                    },
+                    {
+                        q: "La diferencia entre 5.0 y 3.75 es:",
+                        options: { A: "1.25", B: "2.25", C: "1.35", D: "2.35" },
+                        answer: "A",
+                        explanation: "Al restar $5.00 - 3.75$, se obtiene $\\mathbf{1.25}$."
+                    },
+                    {
+                        q: "En un gráfico de barras, ¿qué representa la altura de cada barra?",
+                        options: { A: "La variable de estudio.", B: "La frecuencia o cantidad de datos.", C: "El título del gráfico.", D: "La escala de tiempo." },
+                        answer: "B",
+                        explanation: "En los gráficos de barras, el eje vertical (altura) generalmente representa la **frecuencia** o la cantidad de veces que se repite un valor (variable) del eje horizontal."
+                    },
+                    {
+                        q: "Al multiplicar un número por 100, ¿qué ocurre con sus dígitos?",
+                        options: { A: "Se mueven dos lugares hacia la izquierda.", B: "Se mueven dos lugares hacia la derecha.", C: "Se mueven un lugar hacia la izquierda.", D: "Se divide por 10." },
+                        answer: "A",
+                        explanation: "Al multiplicar por $10^2$ (100), la coma decimal se mueve dos posiciones a la derecha, lo que equivale a que los dígitos se mueven **dos lugares hacia la izquierda** (haciendo el número más grande)."
+                    },
+                    {
+                        q: "¿Qué tipo de ángulo mide más de 90° pero menos de 180°?",
+                        options: { A: "Ángulo Agudo.", B: "Ángulo Recto.", C: "Ángulo Obtuso.", D: "Ángulo Extendido." },
+                        answer: "C",
+                        explanation: "Un **Ángulo Obtuso** mide entre $90^{\\circ}$ y $180^{\\circ}$."
+                    },
+                    {
+                        q: "El resultado de $\\frac{1}{3} + \\frac{1}{6}$ es:",
+                        options: { A: "2/9", B: "1/9", C: "3/6", D: "2/3" },
+                        answer: "C",
+                        explanation: "Para sumar $\\frac{1}{3} + \\frac{1}{6}$, se igualan los denominadores. $\\frac{1}{3}$ es igual a $\\frac{2}{6}$. Entonces, $\\frac{2}{6} + \\frac{1}{6} = \\frac{3}{6}$ (que simplificado es $1/2$). La respuesta $\\mathbf{3/6}$ es la correcta sin simplificar."
+                    },
+                    {
+                        q: "Si un kilo de manzanas cuesta $800 y un kilo de plátanos cuesta $650, ¿cuánto cuestan en total 2 kilos de manzanas y 1 kilo de plátanos?",
+                        options: { A: "$2.100", B: "$1.450", C: "$2.250", D: "$2.050" },
+                        answer: "C",
+                        explanation: "Costo de manzanas: $2 \\times 800 = 1.600. Costo de plátanos: $650. Total: $1.600 + $650 = $\\mathbf{2.250}$."
+                    },
+                    {
+                        q: "Una recta que pasa por un solo punto de una circunferencia sin cortarla se llama:",
+                        options: { A: "Cuerda.", B: "Secante.", C: "Tangente.", D: "Diámetro." },
+                        answer: "C",
+                        explanation: "La recta **Tangente** toca la circunferencia en exactamente un punto, sin penetrarla o cortarla (a diferencia de la secante)."
+                    }
+                ]
+            },
+
+            // ====================================================================================
+            // PRUEBA 3: CIENCIAS NATURALES (25 PREGUNTAS)
+            // ====================================================================================
+            "PRUEBACIENCIAS5": {
+                title: "CIENCIAS NATURALES (5° BÁSICO)",
+                questions: [
+                    {
+                        q: "¿Cuál es la función principal de las neuronas en el sistema nervioso?",
+                        options: { A: "Transportar el oxígeno a los músculos.", B: "Producir hormonas para el crecimiento.", C: "Transmitir señales eléctricas y químicas (impulsos nerviosos).", D: "Filtrar la sangre y producir orina." },
+                        answer: "C",
+                        explanation: "Las neuronas son las células especializadas en la **transmisión del impulso nervioso**, permitiendo la comunicación entre el cerebro y el resto del cuerpo."
+                    },
+                    {
+                        q: "La médula espinal tiene como una de sus funciones principales:",
+                        options: { A: "Controlar el pensamiento abstracto.", B: "Procesar la información sensorial del oído.", C: "Conectar el cerebro con el cuerpo y ser el centro de los actos reflejos.", D: "Bombear la sangre al cuerpo." },
+                        answer: "C",
+                        explanation: "La médula espinal es la principal vía de comunicación entre el encéfalo y el resto del organismo, y además, coordina los **actos reflejos**."
+                    },
+                    {
+                        q: "¿Qué tipo de articulación permite el mayor rango de movimiento, como las que se encuentran en la rodilla y el codo?",
+                        options: { A: "Fijas (ej. cráneo).", B: "Semimóviles (ej. vértebras).", C: "Móviles (ej. rodilla, hombro).", D: "Rígidas." },
+                        answer: "C",
+                        explanation: "Las **articulaciones móviles** (como la rodilla, el hombro y el codo) permiten una amplia libertad de movimiento en varios planos."
+                    },
+                    {
+                        q: "Los músculos están unidos a los huesos mediante estructuras fibrosas llamadas:",
+                        options: { A: "Ligamentos.", B: "Tendones.", C: "Cartílagos.", D: "Nervios." },
+                        answer: "B",
+                        explanation: "Los **tendones** son tejidos conjuntivos que conectan los músculos con los huesos, permitiendo el movimiento esquelético."
+                    },
+                    {
+                        q: "Una dieta saludable debe ser **completa** y **equilibrada**. ¿Qué significa que sea 'completa'?",
+                        options: { A: "Que incluya solo carbohidratos.", B: "Que contenga todos los nutrientes necesarios (carbohidratos, grasas, proteínas, vitaminas y minerales).", C: "Que solo incluya alimentos de origen vegetal.", D: "Que tenga una gran cantidad de calorías." },
+                        answer: "B",
+                        explanation: "Una dieta es **completa** cuando incluye todos los grupos de nutrientes esenciales (proteínas, carbohidratos, lípidos, vitaminas, minerales y agua) en las porciones adecuadas."
+                    },
+                    {
+                        q: "¿Cuál de estos alimentos es la principal fuente de energía rápida para el organismo?",
+                        options: { A: "Aceite de oliva (Lípidos).", B: "Carne de vacuno (Proteínas).", C: "Pan y arroz (Carbohidratos).", D: "Lechuga (Vitaminas)." },
+                        answer: "C",
+                        explanation: "Los **Carbohidratos** (o glúcidos), presentes en cereales, pan, pastas y frutas, son la fuente primaria y más rápida de energía para el cuerpo."
+                    },
+                    {
+                        q: "La **luz**, al pasar de un medio transparente a otro (ej: del aire al agua), cambia su dirección. Este fenómeno se llama:",
+                        options: { A: "Reflexión.", B: "Difusión.", C: "Absorción.", D: "Refracción." },
+                        answer: "D",
+                        explanation: "La **Refracción** es el cambio de dirección y velocidad que experimenta una onda, como la luz, al pasar de un medio material a otro con diferente índice de refracción (ej: un lápiz se ve 'quebrado' en el agua)."
+                    },
+                    {
+                        q: "El **sonido** se propaga más rápidamente en:",
+                        options: { A: "El vacío.", B: "El aire.", C: "Líquidos.", D: "Sólidos." },
+                        answer: "D",
+                        explanation: "El sonido necesita un medio material para propagarse. Lo hace más rápido en **sólidos** que en líquidos, y más rápido en líquidos que en gases (aire), debido a la mayor densidad de las partículas."
+                    },
+                    {
+                        q: "¿Qué capa de la Tierra está compuesta principalmente por roca fundida y se encuentra debajo de la corteza?",
+                        options: { A: "Núcleo Interno.", B: "Núcleo Externo.", C: "Manto.", D: "Atmósfera." },
+                        answer: "C",
+                        explanation: "El **Manto** es la capa más gruesa de la Tierra y se ubica entre la corteza y el núcleo. Está compuesto de silicatos, gran parte de ellos en estado semisólido (magma)."
+                    },
+                    {
+                        q: "Las placas tectónicas se mueven debido a:",
+                        options: { A: "La rotación de la Tierra.", B: "Las corrientes de convección del Manto.", C: "Las erupciones volcánicas.", D: "Los cambios de temperatura en la atmósfera." },
+                        answer: "B",
+                        explanation: "El movimiento de las placas litosféricas se debe a las **corrientes de convección** generadas por el calor interno del **Manto**."
+                    },
+                    {
+                        q: "Si el Sol está sobre la Cordillera de los Andes y las temperaturas son altas, el clima en el centro de Chile ese día será:",
+                        options: { A: "Lluvioso.", B: "Nublado y frío.", C: "Soleado y cálido.", D: "Ventoso." },
+                        answer: "C",
+                        explanation: "El factor principal del tiempo atmosférico es la energía solar. La ausencia de nubes y la intensidad del sol resultan en un clima **soleado y cálido**."
+                    },
+                    {
+                        q: "¿Cuál es la principal característica de un **circuito eléctrico en serie**?",
+                        options: { A: "Todos los componentes están conectados en una sola trayectoria.", B: "Los componentes tienen múltiples caminos para la corriente.", C: "La corriente puede fluir en ambas direcciones.", D: "Se utiliza solo en aparatos de bajo voltaje." },
+                        answer: "A",
+                        explanation: "En un circuito **en serie**, la corriente tiene un **único camino**; si un componente falla (ej: una ampolleta se quema), todo el circuito se apaga."
+                    },
+                    {
+                        q: "Para que una ampolleta se encienda en un circuito simple, se necesita obligatoriamente:",
+                        options: { A: "Un interruptor.", B: "Un cable de plata.", C: "Una fuente de voltaje (pila) y un camino cerrado (circuito).", D: "Un sensor de luz." },
+                        answer: "C",
+                        explanation: "La fuente de voltaje (pila) es la que entrega la energía, y el circuito debe ser un **camino cerrado** para que la corriente fluya sin interrupción."
+                    },
+                    {
+                        q: "Un **ecosistema** se define como:",
+                        options: { A: "Solo los seres vivos de un lugar.", B: "Solo los factores no vivos (agua, aire, suelo).", C: "La interacción entre los seres vivos (bióticos) y los factores no vivos (abióticos).", D: "El conjunto de poblaciones que habitan un área." },
+                        answer: "C",
+                        explanation: "El ecosistema es el concepto que engloba la **comunidad de seres vivos** y su **entorno físico**, y cómo interactúan entre sí."
+                    },
+                    {
+                        q: "¿Cuál de los siguientes es un **factor abiótico** (no vivo) en un ecosistema?",
+                        options: { A: "Los hongos.", B: "La temperatura.", C: "Las bacterias.", D: "Los árboles." },
+                        answer: "B",
+                        explanation: "Los factores abióticos son los componentes físicos y químicos del ecosistema, como la **temperatura**, el agua, la luz solar y el suelo."
+                    },
+                    {
+                        q: "La función del **cerebelo**, ubicado en la parte posterior e inferior del encéfalo, es:",
+                        options: { A: "Controlar la visión y el oído.", B: "Regular la memoria y el lenguaje.", C: "Coordinar el equilibrio y la postura del cuerpo.", D: "Controlar los latidos del corazón." },
+                        answer: "C",
+                        explanation: "El **cerebelo** es el centro de control del equilibrio, la coordinación de movimientos y el mantenimiento de la postura corporal."
+                    },
+                    {
+                        q: "¿Cuál es el nutriente fundamental para la formación y reparación de los tejidos musculares?",
+                        options: { A: "Lípidos.", B: "Vitaminas.", C: "Carbohidratos.", D: "Proteínas." },
+                        answer: "D",
+                        explanation: "Las **proteínas** son los bloques de construcción del organismo, esenciales para el crecimiento, la reparación y el mantenimiento de la estructura de las células y tejidos, incluidos los músculos."
+                    },
+                    {
+                        q: "Un objeto se ve **azul** porque:",
+                        options: { A: "Absorbe la luz azul y refleja todos los demás colores.", B: "Refleja la luz azul y absorbe todos los demás colores.", C: "Solo emite luz de color azul.", D: "La luz no lo puede atravesar." },
+                        answer: "B",
+                        explanation: "Un objeto tiene un color porque **refleja** ese color específico hacia nuestros ojos y **absorbe** el resto de las longitudes de onda del espectro de luz visible."
+                    },
+                    {
+                        q: "La capa externa y rígida de la Tierra, que incluye la corteza y la parte superior del manto, se denomina:",
+                        options: { A: "Astenósfera.", B: "Litosfera.", C: "Hidrosfera.", D: "Mesosfera." },
+                        answer: "B",
+                        explanation: "La **Litosfera** (del griego *lithos*, 'piedra') es la capa superficial, rígida y sólida de la Tierra, que está fragmentada en placas tectónicas."
+                    },
+                    {
+                        q: "¿Qué instrumento se utiliza para medir la **temperatura** del aire en la meteorología?",
+                        options: { A: "Barómetro.", B: "Anemómetro.", C: "Termómetro.", D: "Pluviómetro." },
+                        answer: "C",
+                        explanation: "El **Termómetro** se utiliza para medir la temperatura. El barómetro mide la presión atmosférica, el anemómetro mide la velocidad del viento y el pluviómetro mide la cantidad de lluvia."
+                    },
+                    {
+                        q: "La **fuerza de roce** o fricción es una fuerza que siempre actúa:",
+                        options: { A: "En la misma dirección del movimiento.", B: "En sentido contrario al movimiento.", C: "Perpendicular al movimiento.", D: "Solo cuando el objeto está detenido." },
+                        answer: "B",
+                        explanation: "La fuerza de roce siempre actúa **oponiéndose** al sentido del movimiento de un objeto, produciendo resistencia y calor."
+                    },
+                    {
+                        q: "El órgano principal del sistema nervioso central que procesa la información y controla las funciones voluntarias es:",
+                        options: { A: "El corazón.", B: "El cerebelo.", C: "El tronco encefálico.", D: "El cerebro." },
+                        answer: "D",
+                        explanation: "El **Cerebro** (parte del encéfalo) es el órgano más grande y complejo, responsable del pensamiento, la memoria, las emociones y el control de los movimientos voluntarios."
+                    },
+                    {
+                        q: "El concepto de **depredación** en un ecosistema se refiere a:",
+                        options: { A: "Una relación donde ambos organismos se benefician.", B: "Una relación donde un organismo (depredador) se alimenta de otro (presa).", C: "Una relación de competencia por un recurso limitado.", D: "Una relación donde un organismo se beneficia sin afectar al otro." },
+                        answer: "B",
+                        explanation: "La **Depredación** es una interacción ecológica donde un organismo (depredador) caza y mata a otro (presa) para alimentarse."
+                    },
+                    {
+                        q: "¿Qué parte del circuito eléctrico simple regula el paso de la corriente, permitiendo abrir o cerrar el circuito?",
+                        options: { A: "La pila.", B: "El cable conductor.", C: "El interruptor.", D: "La ampolleta." },
+                        answer: "C",
+                        explanation: "El **Interruptor** es el dispositivo que permite conectar o desconectar el circuito, controlando el flujo de la corriente eléctrica."
+                    },
+                    {
+                        q: "¿Cuál de las siguientes acciones es fundamental para prevenir enfermedades cardiovasculares y fortalecer el sistema musculoesquelético?",
+                        options: { A: "Consumir grandes cantidades de azúcar.", B: "Mantener una vida sedentaria.", C: "Realizar actividad física regularmente.", D: "Dormir menos de 5 horas diarias." },
+                        answer: "C",
+                        explanation: "La **actividad física regular** fortalece el corazón (cardiovascular) y los músculos y huesos (musculoesquelético), siendo esencial para la salud."
+                    }
+                ]
+            },
+
+            // ====================================================================================
+            // PRUEBA 4: HISTORIA, GEOGRAFÍA Y CIENCIAS SOCIALES (25 PREGUNTAS)
+            // ====================================================================================
+            "PRUEBAHISTORIA5": {
+                title: "HISTORIA, GEOGRAFÍA Y CIENCIAS SOCIALES (5° BÁSICO)",
+                questions: [
+                    {
+                        q: "¿Cuál de las siguientes civilizaciones precolombinas se destacó por la construcción de grandes pirámides escalonadas y el desarrollo de un avanzado sistema de escritura jeroglífica?",
+                        options: { A: "Incas.", B: "Aztecas.", C: "Mayas.", D: "Diaguitas." },
+                        answer: "C",
+                        explanation: "La civilización **Maya** se asentó en el sureste de México y Centroamérica y es famosa por sus logros arquitectónicos (pirámides) y su complejo sistema de escritura y calendarios."
+                    },
+                    {
+                        q: "El legado más importante de la civilización romana que aún utilizamos hoy en día es:",
+                        options: { A: "El sistema de canales de riego.", B: "El uso de la rueda en el transporte.", C: "El Derecho y el Latín (base de lenguas como el español).", D: "La invención de la pólvora." },
+                        answer: "C",
+                        explanation: "El **Derecho Romano** sentó las bases de los sistemas legales modernos, y el **Latín** es el origen de todas las lenguas romances, incluyendo el español."
+                    },
+                    {
+                        q: "La principal característica de la organización política de la polis griega era que:",
+                        options: { A: "Estaban gobernadas por un emperador.", B: "Eran ciudades-estado independientes.", C: "Estaban unificadas bajo un solo rey.", D: "Tenían una monarquía absoluta." },
+                        answer: "B",
+                        explanation: "Las polis griegas (ej: Atenas, Esparta) eran **ciudades-estado autónomas e independientes**, cada una con sus propias leyes y forma de gobierno."
+                    },
+                    {
+                        q: "La ubicación geográfica de Chile a lo largo de la costa del Pacífico, determina que su territorio sea propenso a:",
+                        options: { A: "Inundaciones por ríos.", B: "Huracanes y tornados.", C: "Sismos, terremotos y actividad volcánica.", D: "Sequías extremas en todo el territorio." },
+                        answer: "C",
+                        explanation: "Chile se ubica en el **Cinturón de Fuego del Pacífico**, en el límite de las placas tectónicas, lo que provoca alta sismicidad, terremotos y vulcanismo."
+                    },
+                    {
+                        q: "Un **mapa temático** se caracteriza por:",
+                        options: { A: "Representar únicamente la forma de los continentes.", B: "Mostrar información específica sobre un tema (ej: distribución de población, clima).", C: "Ser utilizado únicamente por geógrafos.", D: "No tener escala ni orientación." },
+                        answer: "B",
+                        explanation: "Los mapas temáticos se centran en un **tema o variable específica**, como la densidad de población, las zonas industriales o las áreas de cultivo."
+                    },
+                    {
+                        q: "El concepto de **ciudadanía** en el contexto de las Ciencias Sociales implica:",
+                        options: { A: "Ser mayor de 18 años y tener un trabajo.", B: "La pertenencia a un país y la posesión de derechos y deberes políticos.", C: "Ser vecino de una ciudad grande.", D: "Tener solo derechos, sin deberes." },
+                        answer: "B",
+                        explanation: "La **ciudadanía** es la condición que reconoce a una persona como miembro de pleno derecho de una nación, otorgándole derechos (voto, expresión) y deberes (respeto a la ley)."
+                    },
+                    {
+                        q: "¿Cuál era la principal fuente de alimentación y desarrollo de la civilización **Inca**?",
+                        options: { A: "La caza mayor en la selva amazónica.", B: "La pesca en el Atlántico.", C: "La agricultura intensiva, con el cultivo de papas y maíz en terrazas (andenes).", D: "La recolección de frutos silvestres." },
+                        answer: "C",
+                        explanation: "Los Incas desarrollaron un sofisticado sistema de **andenes o terrazas** en los Andes, lo que les permitió la agricultura de subsistencia, siendo el maíz y la papa sus cultivos principales."
+                    },
+                    {
+                        q: "La forma de gobierno que se originó en la Antigua Atenas, y que implica la participación de los ciudadanos en la toma de decisiones, se llama:",
+                        options: { A: "Monarquía.", B: "Tiranía.", C: "Oligarquía.", D: "Democracia." },
+                        answer: "D",
+                        explanation: "La **Democracia** (gobierno del pueblo) fue creada en Atenas y permite a los ciudadanos elegir y participar en las decisiones políticas."
+                    },
+                    {
+                        q: "¿Qué efecto tiene la Cordillera de los Andes en el clima de Chile?",
+                        options: { A: "Impide la influencia del Océano Pacífico.", B: "Actúa como barrera climática, deteniendo las masas de aire húmedo del Este.", C: "Provoca un clima desértico en la zona central.", D: "Aumenta las temperaturas en el sur." },
+                        answer: "B",
+                        explanation: "La Cordillera actúa como una **barrera orográfica**, impidiendo el paso de vientos y masas de aire que provienen del lado oriental del continente (Argentina/Brasil)."
+                    },
+                    {
+                        q: "El concepto de **Globalización** se refiere principalmente a:",
+                        options: { A: "El estudio de la forma de la Tierra.", B: "El fenómeno de la interdependencia y conexión mundial en lo económico, tecnológico y cultural.", C: "La migración de personas de un país a otro.", D: "El proceso de colonización de América." },
+                        answer: "B",
+                        explanation: "La **Globalización** describe la creciente conexión y dependencia de las economías, culturas y sociedades a escala mundial, principalmente por el avance de la tecnología."
+                    },
+                    {
+                        q: "Los **Derechos Humanos** son universales, inalienables e interdependientes. ¿Qué significa que sean **inalienables**?",
+                        options: { A: "Que solo se aplican en algunos países.", B: "Que pueden ser modificados por un gobierno.", C: "Que nadie tiene derecho a quitártelos o renunciar a ellos.", D: "Que solo los adultos los poseen." },
+                        answer: "C",
+                        explanation: "Inalienable significa que son **inherentes** a la persona y **no pueden ser transferidos, vendidos o negados** por ninguna autoridad."
+                    },
+                    {
+                        q: "El **clima desértico** en el Norte Grande de Chile se debe principalmente a:",
+                        options: { A: "La Cordillera de la Costa.", B: "La Corriente de Humboldt (Corriente Fría).", C: "La influencia de la Antártida.", D: "El bajo relieve de la zona." },
+                        answer: "B",
+                        explanation: "La **Corriente de Humboldt** (o Corriente del Perú) es de agua fría y evita la condensación de vapor de agua, lo que reduce drásticamente las precipitaciones, creando el desierto de Atacama."
+                    },
+                    {
+                        q: "¿Qué figura política era el líder del Imperio **Azteca** y era considerado un semi-dios?",
+                        options: { A: "El Sapa Inca.", B: "El Faraón.", C: "El Tlatoani.", D: "El Rey." },
+                        answer: "C",
+                        explanation: "El líder del Imperio Azteca, con sede en Tenochtitlán, era el **Tlatoani**, cuyo cargo era vitalicio y de carácter semi-divino."
+                    },
+                    {
+                        q: "El concepto geográfico de **huso horario** se utiliza para:",
+                        options: { A: "Medir la distancia entre dos ciudades.", B: "Establecer la hora oficial en diferentes regiones del planeta.", C: "Determinar las zonas climáticas.", D: "Calcular la altitud de un lugar." },
+                        answer: "B",
+                        explanation: "Los **husos horarios** son cada una de las 24 zonas en las que se divide la Tierra, definidas por el meridiano de Greenwich, que sirven para establecer la **hora oficial**."
+                    },
+                    {
+                        q: "La institución del Estado chileno encargada de garantizar los derechos de los niños y adolescentes es:",
+                        options: { A: "El Servicio Electoral (SERVEL).", B: "La Contraloría General de la República.", C: "La Defensoría de la Niñez.", D: "El Banco Central." },
+                        answer: "C",
+                        explanation: "La **Defensoría de la Niñez** es una institución autónoma chilena creada para promover y proteger los derechos garantizados por la Convención sobre los Derechos del Niño."
+                    },
+                    {
+                        q: "¿Cuál fue la principal característica económica de la civilización romana en sus inicios?",
+                        options: { A: "El comercio marítimo con Asia.", B: "La agricultura y la ganadería.", C: "La minería de oro.", D: "La pesca artesanal." },
+                        answer: "B",
+                        explanation: "Como muchas civilizaciones antiguas, la base económica de Roma, especialmente en sus inicios, fue la **agricultura** y la **ganadería**."
+                    },
+                    {
+                        q: "La ciudad de **Atenas** es importante para la Historia porque:",
+                        options: { A: "Fue la capital del Imperio Romano.", B: "Es el lugar de nacimiento de la democracia.", C: "Fue el centro del Imperio Inca.", D: "Inventó la imprenta." },
+                        answer: "B",
+                        explanation: "Atenas es reconocida como la **cuna de la Democracia**, sistema de gobierno donde los ciudadanos participan activamente."
+                    },
+                    {
+                        q: "Los **recursos naturales** que son inagotables a escala humana (como la luz solar y el viento) se clasifican como:",
+                        options: { A: "No renovables.", B: "Finitos.", C: "Renovables.", D: "Infinitos." },
+                        answer: "C",
+                        explanation: "Los recursos **Renovables** son aquellos que pueden regenerarse a un ritmo igual o mayor al que se consumen (ej: energía solar, energía eólica)."
+                    },
+                    {
+                        q: "El fenómeno de **El Niño** en la costa del Pacífico chileno genera:",
+                        options: { A: "Un enfriamiento de las aguas y sequías.", B: "Un aumento de las precipitaciones y temperaturas de las aguas.", C: "Fuertes huracanes.", D: "Nevadas en la zona central." },
+                        answer: "B",
+                        explanation: "**El Niño** es un fenómeno climático que produce el **calentamiento** de las aguas del Pacífico, lo que aumenta la evaporación y, consecuentemente, las **lluvias y la temperatura ambiente** en la costa chilena."
+                    },
+                    {
+                        q: "¿Cuál es el principal rol de la **familia** como institución social, según las Ciencias Sociales?",
+                        options: { A: "Controlar el sistema económico del país.", B: "Garantizar la seguridad nacional.", C: "Ser el núcleo fundamental de la sociedad y la primera formadora de valores.", D: "Administrar la justicia." },
+                        answer: "C",
+                        explanation: "La familia es la célula básica o **núcleo fundamental de la sociedad**, responsable de la socialización primaria y la formación de valores de sus miembros."
+                    },
+                    {
+                        q: "La civilización **Azteca** construyó su gran capital, Tenochtitlán, sobre:",
+                        options: { A: "Una alta montaña.", B: "Un gran valle desértico.", C: "Islotes en medio del lago Texcoco.", D: "La costa del Golfo de México." },
+                        answer: "C",
+                        explanation: "La capital azteca, Tenochtitlán, fue construida sobre varios **islotes en el lago Texcoco**, utilizando un sistema de chinampas."
+                    },
+                    {
+                        q: "El concepto de **diversidad cultural** se refiere a:",
+                        options: { A: "La diferencia de idiomas entre países.", B: "La existencia de múltiples culturas, tradiciones y costumbres dentro de una misma sociedad.", C: "El conflicto entre naciones.", D: "El estudio de la geografía." },
+                        answer: "B",
+                        explanation: "La **Diversidad Cultural** es la variedad de culturas que coexisten en el mundo, reflejando la pluralidad de formas de vida, cosmovisiones y expresiones de la humanidad."
+                    },
+                    {
+                        q: "Los pueblos originarios de Chile que desarrollaron la navegación en canoas y vivieron de la pesca y la caza de animales marinos se denominan pueblos:",
+                        options: { A: "Agricultores.", B: "Alfareros.", C: "Nómadas terrestres.", D: "Nómadas canoeros." },
+                        answer: "D",
+                        explanation: "Los pueblos como los Chonos, Alacalufes y Yámanas, que vivieron en los canales del sur, son clasificados como **Nómadas Canoeros** debido a su estilo de vida ligado al mar y el uso de canoas."
+                    },
+                    {
+                        q: "La representación de la Tierra sobre una superficie plana se denomina:",
+                        options: { A: "Globo terráqueo.", B: "Modelo tridimensional.", C: "Mapa.", D: "Brújula." },
+                        answer: "C",
+                        explanation: "El **Mapa** es una representación bidimensional y plana de la superficie terrestre o una parte de ella, utilizando proyecciones y escalas."
+                    },
+                    {
+                        q: "¿Qué institución se encarga de ejercer el poder Ejecutivo y de la administración del país en Chile?",
+                        options: { A: "El Congreso Nacional.", B: "El Poder Judicial.", C: "La Presidencia de la República.", D: "El Tribunal Constitucional." },
+                        answer: "C",
+                        explanation: "La **Presidencia de la República** ejerce la función de Jefe de Estado y Jefe de Gobierno, dirigiendo el poder Ejecutivo y la administración del país."
+                    }
+                ]
+            },
+
+            // ====================================================================================
+            // PRUEBA 5: INGLÉS (25 PREGUNTAS)
+            // ====================================================================================
+            "PRUEBAINGLES5": {
+                title: "INGLÉS (5° BÁSICO)",
+                questions: [
+                    {
+                        q: "Choose the correct simple present sentence: (She / like / dog).",
+                        options: { A: "She likes dog.", B: "She like dogs.", C: "She likes dogs.", D: "She is liking dogs." },
+                        answer: "C",
+                        explanation: "In Simple Present, the verb for the third person singular (He, She, It) must end in -s. The correct plural form 'dogs' is also needed for the general preference: **She likes dogs**."
+                    },
+                    {
+                        q: "What is the correct opposite of the adjective 'young'?",
+                        options: { A: "Big.", B: "Short.", C: "Old.", D: "New." },
+                        answer: "C",
+                        explanation: "The opposite of 'young' (joven) is **old** (viejo/a). The other options are incorrect opposites (big/small, short/tall, new/old)."
+                    },
+                    {
+                        q: "Complete the sentence with the correct preposition: 'The book is ______ the table.'",
+                        options: { A: "In.", B: "Under.", C: "On.", D: "Next." },
+                        answer: "C",
+                        explanation: "The correct preposition for objects resting on a surface is **on**. (The book is **on** the table)."
+                    },
+                    {
+                        q: "What does 'breakfast' mean in Spanish?",
+                        options: { A: "Almuerzo.", B: "Cena.", C: "Desayuno.", D: "Once." },
+                        answer: "C",
+                        explanation: "**Breakfast** is the first meal of the day, which in Spanish is **Desayuno**."
+                    },
+                    {
+                        q: "Which word is a member of the family?",
+                        options: { A: "Pencil.", B: "Brother.", C: "Kitchen.", D: "Math." },
+                        answer: "B",
+                        explanation: "**Brother** (hermano) is the only word related to the family members vocabulary from the temario."
+                    },
+                    {
+                        q: "Complete: 'It is a sunny day. I should wear my ______.'",
+                        options: { A: "Scarf.", B: "Raincoat.", C: "Sunglasses.", D: "Boots." },
+                        answer: "C",
+                        explanation: "On a **sunny day**, you protect your eyes with **sunglasses** (gafas de sol)."
+                    },
+                    {
+                        q: "Translate the question: 'How old is your mother?'",
+                        options: { A: "¿Dónde vive tu madre?", B: "¿Cuántos años tiene tu madre?", C: "¿Cómo es tu madre?", D: "¿Qué hace tu madre?" },
+                        answer: "B",
+                        explanation: "**How old is...?** is the standard question structure to ask for someone's **age** (edad)."
+                    },
+                    {
+                        q: "Choose the correct sentence using the possessive adjective: (This is / my / sister / dress).",
+                        options: { A: "This is my sister dress.", B: "This is my sister's dress.", C: "This is the dress of sister.", D: "This is sister my dress." },
+                        answer: "B",
+                        explanation: "To indicate possession (el vestido de mi hermana), we use the possessive **'s** (sister's dress): **This is my sister's dress**."
+                    },
+                    {
+                        q: "Which school subject involves drawing and painting?",
+                        options: { A: "P.E.", B: "Science.", C: "Art.", D: "History." },
+                        answer: "C",
+                        explanation: "The subject related to drawing, painting, and creativity is **Art** (Arte)."
+                    },
+                    {
+                        q: "Identify the correct vocabulary for an object found in the living room:",
+                        options: { A: "Desk.", B: "Dish.", C: "Sofa.", D: "Ruler." },
+                        answer: "C",
+                        explanation: "The **Sofa** (sillón/sofá) is typically found in the **living room** (sala de estar). Desk is in the classroom, dish in the kitchen, and ruler is a school object."
+                    },
+                    {
+                        q: "Translate: 'Mi casa es grande y tiene un jardín.'",
+                        options: { A: "My house is small and has a garden.", B: "My home is big and has a garden.", C: "His house is big and has a garden.", D: "My house is big and has two gardens." },
+                        answer: "B",
+                        explanation: "**My house is big and has a garden** is the correct translation of 'Mi casa es grande y tiene un jardín'."
+                    },
+                    {
+                        q: "What is the plural of 'apple'?",
+                        options: { A: "Appleses.", B: "Apple.", C: "Applus.", D: "Apples." },
+                        answer: "D",
+                        explanation: "Most English nouns form the plural by simply adding **-s**: **Apples**."
+                    },
+                    {
+                        q: "Choose the correct 'to be' conjugation: 'They ______ students.'",
+                        options: { A: "Is.", B: "Are.", C: "Am.", D: "Be." },
+                        answer: "B",
+                        explanation: "The correct form of the verb 'to be' for the pronoun 'They' is **are**: **They are students**."
+                    },
+                    {
+                        q: "If the weather is 'rainy', you should use a:",
+                        options: { A: "T-shirt.", B: "Sunglasses.", C: "Sweater.", D: "Raincoat." },
+                        answer: "D",
+                        explanation: "A **raincoat** (impermeable) is worn when the weather is **rainy** (lluvioso)."
+                    },
+                    {
+                        q: "Which sentence uses the simple present correctly to describe a routine?",
+                        options: { A: "I am eating pizza now.", B: "I eats vegetables every day.", C: "I eat vegetables every day.", D: "I ate vegetables yesterday." },
+                        answer: "C",
+                        explanation: "The simple present for 'I' is the base form of the verb (**eat**). 'Every day' indicates a routine."
+                    },
+                    {
+                        q: "The word 'library' is a place in the:",
+                        options: { A: "Home.", B: "Bathroom.", C: "School.", D: "Kitchen." },
+                        answer: "C",
+                        explanation: "A **library** (biblioteca) is one of the places found in the **School** (escuela/colegio)."
+                    },
+                    {
+                        q: "Identify the odd word out (the one that doesn't belong):",
+                        options: { A: "Cheese.", B: "Fish.", C: "Chicken.", D: "Brother." },
+                        answer: "D",
+                        explanation: "Cheese, Fish, and Chicken are **food** items. **Brother** is a family member."
+                    },
+                    {
+                        q: "What is the Spanish meaning of the opposite pair 'open - shut'?",
+                        options: { A: "Abierto - cerrado.", B: "Feliz - triste.", C: "Joven - viejo.", D: "Grande - pequeño." },
+                        answer: "A",
+                        explanation: "**Open** means 'abierto' and **shut** means 'cerrado'."
+                    },
+                    {
+                        q: "Which option is a common preposition of place?",
+                        options: { A: "Always.", B: "Near.", C: "Quickly.", D: "Run." },
+                        answer: "B",
+                        explanation: "**Near** (cerca de) is a preposition used to indicate location or place."
+                    },
+                    {
+                        q: "Complete the sentence with the correct possessive adjective: 'This is my father. ______ name is David.'",
+                        options: { A: "Her.", B: "Its.", C: "His.", D: "Their." },
+                        answer: "C",
+                        explanation: "The father is a male person, so the correct possessive adjective is **His** (Su/de él)."
+                    },
+                    {
+                        q: "What is the term for the large room where you cook and prepare food?",
+                        options: { A: "Bedroom.", B: "Bathroom.", C: "Living room.", D: "Kitchen." },
+                        answer: "D",
+                        explanation: "The room where you cook is the **Kitchen** (cocina)."
+                    },
+                    {
+                        q: "Choose the correct sentence to express ability: (I / can / swim).",
+                        options: { A: "I cans swim.", B: "I can to swim.", C: "I can swim.", D: "I am can swim." },
+                        answer: "C",
+                        explanation: "The correct structure for expressing ability is Subject + **can** + **base form of the verb**: **I can swim**."
+                    },
+                    {
+                        q: "Which word refers to an object used for writing and is part of the 'classroom objects' vocabulary?",
+                        options: { A: "Chair.", B: "Door.", C: "Pencil.", D: "Desk." },
+                        answer: "C",
+                        explanation: "The **Pencil** (lápiz) is an object specifically used for writing and is common in the classroom vocabulary."
+                    },
+                    {
+                        q: "What time of the day is 'dinner'?",
+                        options: { A: "The first meal.", B: "The meal at midday.", C: "The evening meal.", D: "The afternoon snack." },
+                        answer: "C",
+                        explanation: "**Dinner** (cena) or supper is the meal that is eaten in the **evening** or at night."
+                    },
+                    {
+                        q: "The plural form of 'child' is:",
+                        options: { A: "Childs.", B: "Children.", C: "Childres.", D: "Childen." },
+                        answer: "B",
+                        explanation: "The word **children** is an irregular plural form of 'child'."
+                    }
+                ]
+            }
+        };
+
+        // --- 2. LÓGICA DEL SISTEMA ---
+        const PASSWORD_MAP = {
+            "PRUEBALENGUA5": "PRUEBALENGUA5", 
+            "PRUEBAMATE5": "PRUEBAMATE5", 
+            "PRUEBACIENCIAS5": "PRUEBACIENCIAS5", 
+            "PRUEBAINGLES5": "PRUEBAINGLES5", 
+            "PRUEBAHISTORIA5": "PRUEBAHISTORIA5"
+        };
+        let currentQuizId = null;
+
+        const accessPortal = document.getElementById('access-portal');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const inputField = document.getElementById('portal-input'); 
+        const submitButton = document.getElementById('submit-button');
+        const message = document.getElementById('portal-message');
+        const quizForm = document.getElementById('quiz-form');
+        const submitQuizButton = document.getElementById('submit-quiz-button');
+
+        // Función para validar la clave y cargar la prueba
+        function checkPortalAccess() {
+            const enteredPassword = inputField.value.toUpperCase(); 
+            message.textContent = '';
+            message.className = '';
+
+            if (PASSWORD_MAP[enteredPassword] && quizData[enteredPassword]) {
+                currentQuizId = enteredPassword;
+                
+                message.textContent = `>> ACCESO CONCEDIDO... INICIANDO SIMULACIÓN: ${quizData[enteredPassword].title}...`;
+                message.classList.add('success'); 
+                
+                setTimeout(() => {
+                    loadQuiz(currentQuizId);
+                }, 1500);
+            } else {
+                message.textContent = '[ ERROR 401 ] CÓDIGO DE ACCESO INVÁLIDO.';
+                message.classList.add('denied');
+                inputField.value = '';
+                inputField.focus();
+            }
+        }
+
+        // Función para cargar las preguntas en el DOM
+        function loadQuiz(quizId) {
+            accessPortal.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            const quiz = quizData[quizId];
+            document.getElementById('quiz-title').textContent = `${quiz.title} (${quiz.questions.length} Preguntas)`;
+            
+            quizForm.innerHTML = ''; // Limpiar preguntas anteriores
+
+            quiz.questions.forEach((qItem, index) => {
+                const qNumber = index + 1;
+                const questionBlock = document.createElement('div');
+                questionBlock.classList.add('question-block');
+                
+                let html = `<p class="question-text"><strong>${qNumber}.</strong> ${qItem.q}</p>`;
+                
+                Object.keys(qItem.options).forEach(key => {
+                    html += `
+                        <label class="option-label">
+                            <input type="radio" name="question${qNumber}" value="${key}" required>
+                            (${key}) ${qItem.options[key]}
+                        </label>
+                    `;
+                });
+                
+                questionBlock.innerHTML = html;
+                quizForm.appendChild(questionBlock);
+            });
+        }
+
+        // Función para procesar y mostrar los resultados detallados
+        function reviewQuiz(e) {
+            e.preventDefault();
+            
+            const quiz = quizData[currentQuizId];
+            let score = 0;
+            const reviewArea = document.getElementById('review-area');
+            reviewArea.innerHTML = ''; // Limpiar resultados anteriores
+
+            quiz.questions.forEach((qItem, index) => {
+                const qNumber = index + 1;
+                const selectedOption = document.querySelector(`input[name="question${qNumber}"]:checked`);
+                const userAnswer = selectedOption ? selectedOption.value : 'Sin responder';
+                const isCorrect = userAnswer === qItem.answer;
+                
+                if (isCorrect) {
+                    score++;
+                }
+
+                const reviewBlock = document.createElement('div');
+                reviewBlock.classList.add('review-question');
+                reviewBlock.classList.add(isCorrect ? 'result-correct' : 'result-incorrect');
+
+                reviewBlock.innerHTML = `
+                    <h3>Pregunta ${qNumber}: ${isCorrect ? '&#9989; CORRECTA' : '&#10060; INCORRECTA'}</h3>
+                    <p class="question-text">${qItem.q}</p>
+                    <p class="user-answer">Tu Respuesta: (${userAnswer})</p>
+                    <p class="correct-answer">Respuesta Correcta: (${qItem.answer}) ${qItem.options[qItem.answer]}</p>
+                    <div class="explanation">
+                        <strong>Explicación Detallada:</strong> ${qItem.explanation}
+                    </div>
+                `;
+                
+                reviewArea.appendChild(reviewBlock);
+            });
+
+            // Mostrar puntuación final
+            document.getElementById('final-score').innerHTML = `
+                Puntaje Obtenido: <span style="color: #00ff00; font-size: 1.5em;">${score}</span> / <span style="color: #ffcc00; font-size: 1.5em;">${quiz.questions.length}</span>
+                <br><small style="color: #00ff00;">¡Has revisado ${quiz.questions.length} preguntas con retroalimentación completa!</small>
+            `;
+
+            // Cambiar a vista de resultados
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+
+        // --- 3. EVENT LISTENERS ---
+        submitButton.addEventListener('click', checkPortalAccess);
+        inputField.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPortalAccess();
+            }
+        });
+        submitQuizButton.addEventListener('click', reviewQuiz);
+    </script>
+
+</body>
+</html>
